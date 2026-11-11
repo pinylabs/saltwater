@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "prepare": [
+    "pnpm install --frozen-lockfile"
+  ]
+}
