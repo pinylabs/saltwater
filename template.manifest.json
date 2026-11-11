@@ -1,0 +1,15 @@
+{
+  "name": "Saltwater",
+  "line": "Sydney's coastal walks, walked, timed and written up: a photo-led EmDash blog with comments.",
+  "kind": "emdash",
+  "category": "blog",
+  "stacks": [
+    "astro",
+    "emdash"
+  ],
+  "status": "preview",
+  "demo": null,
+  "preview": null,
+  "licence": "MIT",
+  "basedOn": "EmDash blog-cloudflare template, 1.4.0 (MIT, Cloudflare)"
+}

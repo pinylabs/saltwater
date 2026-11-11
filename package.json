@@ -1,0 +1,31 @@
+{
+	"name": "saltwater",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"emdash": {
+		"seed": "seed/seed.json"
+	},
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"deploy": "astro build && wrangler deploy",
+		"typecheck": "astro check"
+	},
+	"dependencies": {
+		"@astrojs/cloudflare": "14.4.6",
+		"@astrojs/react": "7.1.5",
+		"@emdash-cms/cloudflare": "1.4.0",
+		"astro": "7.4.7",
+		"emdash": "1.4.0",
+		"react": "19.3.1",
+		"react-dom": "19.3.1"
+	},
+	"devDependencies": {
+		"@astrojs/check": "0.9.12",
+		"@cloudflare/workers-types": "5.20261023.1",
+		"wrangler": "4.157.0"
+	},
+	"packageManager": "pnpm@11.10.0"
+}

@@ -1,0 +1,309 @@
+---
+// The preview home, from its accepted design. The full template is being built by the Pinies;
+// until then this page is the theme's home and the rest of the site is EmDash's own template.
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saltwater — Sydney's coastal walks</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link is:inline rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Sans:wght@400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<style is:global>
+/* The motion every site shares. Only transform and opacity move, so it stays on the compositor at 60 fps. Under
+   prefers-reduced-motion everything is still, and a browser without scroll timelines simply shows the page. */
+
+/* Page changes: the browser's cross-document view transition, as Astro's view transitions give it. A picture that
+   names itself the same on both pages grows into its place; the rest fades and slides. */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: 260ms cubic-bezier(.4, 0, 1, 1) both vt-out; }
+::view-transition-new(root) { animation: 420ms cubic-bezier(0, 0, .2, 1) 80ms both vt-in; }
+::view-transition-group(*) { animation-duration: 520ms; animation-timing-function: cubic-bezier(.2, .8, .2, 1); }
+@keyframes vt-out { to { opacity: 0; transform: translateY(-12px); } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(24px); } }
+
+/* The hero's first moment: its words rise one line after another. */
+.rise { animation: rise .9s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i, 0) * 110ms + 120ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(36px); } }
+
+/* Scroll-driven: reveals move with `translate` and `scale`, so a card's hover `transform` still applies.
+   The hero's photo drifts slower than the page, and its words lift away. */
+@supports (animation-timeline: scroll()) {
+  .parallax { animation: parallax linear both; animation-timeline: scroll(root); animation-range: 0 100vh; }
+  .lift { animation: lift linear both; animation-timeline: scroll(root); animation-range: 0 70vh; }
+  .reveal { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 70%; }
+  .reveal-side { animation: reveal-side linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; }
+  .zoom-in { animation: zoom-in linear both; animation-timeline: view(); animation-range: entry 0% cover 50%; }
+}
+@keyframes parallax { from { transform: translateY(0) scale(1.08); } to { transform: translateY(22%) scale(1.16); } }
+@keyframes lift { to { opacity: 0; transform: translateY(-90px); } }
+@keyframes reveal { from { opacity: 0; translate: 0 70px; scale: .97; } }
+@keyframes reveal-side { from { opacity: 0; translate: -60px 0; } }
+@keyframes zoom-in { from { transform: scale(1.25); } }
+
+/* Hover, for a site that takes it: a card lifts and its photo leans in. Each site adds its own signature beside it. */
+.lift-card { transition: transform .45s cubic-bezier(.2, .8, .2, 1), box-shadow .45s; }
+.lift-card .pic img { transition: transform .9s cubic-bezier(.2, .8, .2, 1); }
+.lift-card:hover { transform: translateY(-8px); }
+.lift-card:hover .pic img { transform: scale(1.07); }
+.button { transition: transform .25s cubic-bezier(.2, .8, .2, 1), background-color .25s; }
+.button:hover { transform: translateY(-2px); }
+
+/* Calm: opacity only, for a site whose signature is stillness. */
+@supports (animation-timeline: view()) {
+  .fade { animation: fade linear both; animation-timeline: view(); animation-range: entry 0% entry 90%; }
+}
+@keyframes fade { from { opacity: 0; } }
+
+/* The Pinies' entrances, the public site's four, played once when their row comes into view. */
+.pinies[data-entrance] .face { animation-duration: .9s; animation-fill-mode: both; animation-delay: calc(var(--i) * .14s); animation-timing-function: cubic-bezier(.3, .7, .3, 1); }
+.pinies[data-entrance='walk'] .face { animation-name: walk; }
+.pinies[data-entrance='skid'] .face { animation-name: skid; }
+.pinies[data-entrance='drop'] .face { animation-name: drop; animation-timing-function: ease-in; }
+.pinies[data-entrance='peek'] .face { animation-name: peek; }
+.pinies[data-entrance='peek'] .face:last-child { animation-name: peek, wave; animation-duration: .9s, .6s; animation-delay: calc(4 * .14s), 1.5s; animation-fill-mode: both, none; }
+.pinies:not([data-entrance]):not([data-shown]) .face { opacity: 0; }
+@keyframes walk {
+  0% { transform: translateX(-120px); opacity: 0; } 12% { opacity: 1; }
+  20% { transform: translateX(-96px) translateY(-4px); } 35% { transform: translateX(-70px) translateY(0); }
+  50% { transform: translateX(-44px) translateY(-4px); } 65% { transform: translateX(-16px) translateY(0); }
+  80% { transform: translateX(0) translateY(-16px); } 100% { transform: translateX(0) translateY(0); }
+}
+@keyframes skid {
+  0% { transform: translateX(520px) rotate(0); opacity: 0; } 15% { opacity: 1; }
+  65% { transform: translateX(-8px) rotate(-12deg); } 82% { transform: translateX(3px) rotate(3deg); } 100% { transform: translateX(0) rotate(0); }
+}
+@keyframes drop {
+  0% { transform: translateY(-120px); opacity: 0; } 15% { opacity: 1; }
+  60% { transform: translateY(0); } 75% { transform: translateY(-12px); } 90% { transform: translateY(0); } 95% { transform: translateY(-3px); } 100% { transform: translateY(0); }
+}
+@keyframes peek { 0% { transform: translateY(56px); opacity: 0; } 20% { opacity: 1; } 70% { transform: translateY(-5px); } 100% { transform: translateY(0); } }
+@keyframes wave { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-12deg); } 50% { transform: rotate(10deg); } 75% { transform: rotate(-6deg); } }
+
+/* Still: reduced motion, and the stills this mock renders. */
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .pinies .face { opacity: 1 !important; }
+}
+html.still *, html.still *::before, html.still *::after { animation: none !important; transition: none !important; }
+html.still .pinies .face { opacity: 1 !important; }
+</style>
+<style is:global>
+:root {
+  --sand: #f3ead9; --ink: #0d2230; --soft: #4a5d68; --sea: #0b4f6c; --deep: #082a3b; --foam: #e9f6f8; --sun: #ffcf4d; --card: #fffaf0; --line: #dccfb6;
+  --cond: 'Bricolage Grotesque', system-ui, sans-serif; --serif: 'Newsreader', Georgia, serif; --sans: 'Instrument Sans', system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --sand: #071823; --ink: #e8f1f3; --soft: #9db2bc; --sea: #1b7ea6; --deep: #04121b; --foam: #0d2a38; --card: #0c2230; --line: #1d3a4a; }
+}
+* { box-sizing: border-box; margin: 0; }
+html { background: var(--sand); }
+body { background: var(--sand); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; overflow-x: clip; }
+a { color: inherit; text-decoration: none; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+header { position: absolute; inset: 0 0 auto; z-index: 5; color: #fff; }
+header .wrap { display: flex; align-items: center; justify-content: space-between; height: 84px; }
+.mark { font-family: var(--cond); font-weight: 800; font-stretch: 75%; font-size: 30px; letter-spacing: .02em; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+.mark svg { width: 30px; height: 30px; }
+nav { display: flex; gap: 30px; font-size: 15px; font-weight: 600; align-items: center; }
+nav .button { background: var(--sun); color: #0d2230; padding: 10px 18px; border-radius: 999px; }
+.hero { position: relative; height: min(100vh, 860px); min-height: 620px; overflow: hidden; color: #fff; isolation: isolate; }
+.hero video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+@media (prefers-color-scheme: dark) {
+  .hero video { filter: brightness(.62) saturate(.75) hue-rotate(8deg); }
+  .hero::after { background: linear-gradient(180deg, rgba(3, 12, 24, .7) 0%, rgba(3, 12, 24, .25) 40%, rgba(3, 12, 24, .5) 70%, var(--sand) 100%) !important; }
+  .hero h1 em { color: #7fd8ee; }
+}
+/* The signature: the headline comes in like a tide, line by line from the side, and the first walk's route draws along the lower edge. */
+.hero h1 .line { display: block; overflow: hidden; padding-bottom: .04em; }
+.hero h1 .line span { display: inline-block; animation: tide 1.3s cubic-bezier(.22, .9, .25, 1.12) both; animation-delay: calc(var(--i) * 220ms + 200ms); }
+@keyframes tide { 0% { transform: translateX(-108%) skewX(-8deg); } 70% { transform: translateX(2%) skewX(1deg); } 100% { transform: none; } }
+.route-edge { position: absolute; left: 0; right: 0; bottom: 0; height: 120px; pointer-events: none; }
+.route-edge svg { width: 100%; height: 100%; display: block; }
+.route-edge .path { stroke-dasharray: 1700; stroke-dashoffset: 1700; animation: draw-edge 2.6s cubic-bezier(.45, 0, .2, 1) 1.1s both; }
+.route-edge .stop { opacity: 0; animation: stop-in .4s ease-out both; animation-delay: calc(1.1s + var(--t) * 2.6s); }
+.route-edge .labels span { position: absolute; bottom: 8px; font: 600 13px var(--sans); color: #fff; text-shadow: 0 1px 6px rgba(0, 0, 0, .5); opacity: 0; animation: stop-in .5s ease-out 3.2s both; }
+html.still .route-edge .labels span { opacity: 1; }
+@keyframes draw-edge { to { stroke-dashoffset: 0; } }
+@keyframes stop-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+html.still .route-edge .path { stroke-dashoffset: 0; } html.still .route-edge .stop { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .route-edge .path { stroke-dashoffset: 0; } .route-edge .stop { opacity: 1; } }
+.hero::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(4, 18, 27, .45) 0%, rgba(4, 18, 27, 0) 30%, rgba(4, 18, 27, .1) 55%, rgba(4, 18, 27, .78) 100%); }
+.hero .wrap { height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 132px; }
+.hero h1 { font-family: var(--cond); font-weight: 800; font-stretch: 75%; text-transform: uppercase; font-size: 148px; line-height: .86; letter-spacing: -.01em; }
+.hero h1 span { display: block; }
+.hero h1 em { font-style: normal; color: var(--sun); }
+.hero p { font-family: var(--serif); font-size: 24px; line-height: 1.4; max-width: 600px; margin: 22px 0 28px; }
+.hero .actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.hero .actions a { font-weight: 600; font-size: 16px; padding: 14px 22px; border-radius: 999px; }
+.hero .actions .primary { background: var(--sun); color: #0d2230; }
+.hero .actions .ghost { background: rgba(255, 255, 255, .16); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, .4); }
+.hero .credit { position: absolute; right: 40px; top: 96px; font-size: 12px; opacity: .8; }
+.walks { padding: 96px 0 72px; }
+.eyebrow { font-family: var(--cond); font-weight: 800; font-stretch: 75%; text-transform: uppercase; letter-spacing: .08em; font-size: 16px; color: var(--sea); }
+.walks h2 { font-family: var(--cond); font-weight: 800; font-stretch: 75%; text-transform: uppercase; font-size: 84px; line-height: .9; margin: 10px 0 40px; }
+.grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 22px; }
+.card { background: var(--card); border-radius: 22px; overflow: hidden; box-shadow: 0 22px 50px -32px rgba(8, 42, 59, .55); display: flex; flex-direction: column; }
+.card:hover { box-shadow: 0 34px 70px -30px rgba(8, 42, 59, .7); }
+.card.big { grid-column: span 4; grid-row: span 2; }
+.card.small { grid-column: span 2; }
+.card.wide { grid-column: span 3; }
+.card .pic { position: relative; overflow: hidden; flex: 1; min-height: 210px; }
+.card.big .pic { min-height: 520px; }
+.card .pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.card .grade { position: absolute; left: 16px; top: 16px; background: var(--sun); color: #0d2230; font-weight: 700; font-size: 13px; padding: 6px 12px; border-radius: 999px; }
+.card .text { padding: 18px 22px 22px; }
+.card h3 { font-family: var(--cond); font-weight: 800; font-stretch: 75%; text-transform: uppercase; font-size: 32px; line-height: .95; }
+.card.big h3 { font-size: 54px; }
+.card p { color: var(--soft); font-family: var(--serif); font-size: 18px; line-height: 1.45; margin-top: 8px; }
+.facts { display: flex; gap: 16px; margin-top: 12px; font-size: 14px; font-weight: 600; color: var(--sea); }
+.log { padding: 0 0 88px; }
+.log .wrap { display: grid; grid-template-columns: 1fr 1.4fr; gap: 56px; align-items: start; }
+.log .counts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.log .counts div { background: var(--sea); color: #fff; border-radius: 22px; padding: 22px; }
+.log .counts b { display: block; font-family: var(--cond); font-weight: 800; font-stretch: 75%; font-size: 64px; line-height: .9; color: var(--sun); }
+.log .counts span { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.log h2 { font-family: var(--cond); font-weight: 800; font-stretch: 75%; text-transform: uppercase; font-size: 44px; line-height: .95; margin-bottom: 18px; }
+.log ol { list-style: none; padding: 0; border-top: 2px solid var(--ink); }
+.log li { display: grid; grid-template-columns: 90px 1fr; gap: 18px; padding: 14px 0; border-bottom: 1px solid var(--line); font-family: var(--serif); font-size: 19px; line-height: 1.4; }
+.log li time { font-family: var(--cond); font-weight: 800; font-stretch: 75%; font-size: 22px; text-transform: uppercase; color: var(--sea); line-height: 1.1; }
+.band { background: var(--sun); color: #0d2230; }
+.band .wrap { display: grid; grid-template-columns: 1fr 1.3fr; gap: 48px; padding: 72px 40px; align-items: center; }
+.band h2 { font-family: var(--cond); font-weight: 800; font-stretch: 75%; text-transform: uppercase; font-size: 72px; line-height: .9; }
+.band ul { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 18px 28px; font-family: var(--serif); font-size: 19px; line-height: 1.45; }
+.band li b { display: block; font-family: var(--sans); font-size: 15px; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 2px; }
+.strip { position: relative; height: 560px; overflow: hidden; color: #fff; display: grid; place-items: center; text-align: center; isolation: isolate; }
+.strip img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.strip::after { content: ''; position: absolute; inset: 0; z-index: -1; background: rgba(4, 18, 27, .35); }
+.strip blockquote { font-family: var(--serif); font-style: italic; font-size: 54px; line-height: 1.1; max-width: 900px; padding: 0 24px; }
+.strip small { display: block; font-family: var(--sans); font-style: normal; font-size: 15px; margin-top: 18px; opacity: .85; }
+footer { background: var(--deep); color: #cfe3ea; padding: 56px 0 40px; }
+footer .wrap { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: end; }
+footer .made { display: flex; align-items: flex-end; gap: 18px; }
+.pinies { display: flex; }
+.pinies .face { width: 64px; height: 64px; margin-right: -8px; }
+.pinies .face svg { width: 100%; height: 100%; }
+footer .made p { font-family: var(--serif); font-size: 19px; line-height: 1.4; }
+footer .made a { text-decoration: underline; text-underline-offset: 3px; }
+footer .credits { font-size: 13px; line-height: 1.7; opacity: .8; }
+footer .credits a { text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .3); }
+@media (max-width: 767px) {
+  .wrap { padding: 0 18px; }
+  header .wrap { height: 68px; }
+  .mark { font-size: 24px; }
+  nav a:not(.button) { display: none; }
+  nav .button { padding: 8px 14px; font-size: 14px; }
+  .hero { height: 760px; min-height: 0; }
+  .hero .wrap { padding-bottom: 44px; }
+  .hero h1 { font-size: 76px; }
+  .hero p { font-size: 19px; }
+  .hero .credit { right: 18px; top: 74px; }
+  .hero .wrap { padding-bottom: 110px; }
+  .route-edge .labels span:nth-child(2), .route-edge .labels span:nth-child(3) { display: none; }
+  .walks { padding: 64px 0 48px; }
+  .walks h2 { font-size: 52px; margin-bottom: 28px; }
+  .grid { grid-template-columns: 1fr; gap: 18px; }
+  .card.big, .card.small, .card.wide { grid-column: auto; grid-row: auto; }
+  .card.big .pic, .card .pic { min-height: 240px; }
+  .card.big h3 { font-size: 40px; }
+  .band .wrap { grid-template-columns: 1fr; padding: 52px 18px; gap: 26px; }
+  .log .wrap { grid-template-columns: 1fr; gap: 28px; }
+  .log .counts b { font-size: 48px; }
+  .log li { grid-template-columns: 70px 1fr; font-size: 17px; }
+  .band h2 { font-size: 52px; }
+  .band ul { grid-template-columns: 1fr; }
+  .strip { height: 420px; }
+  .strip blockquote { font-size: 32px; }
+  footer .wrap { grid-template-columns: 1fr; }
+  footer .made { flex-direction: column; align-items: flex-start; }
+}
+.still-card { height: 100%; display: grid; place-items: center; background: linear-gradient(135deg, var(--sky1, #bfe8ef), var(--sky2, #ffe2b8)); font-family: var(--display); font-weight: 700; font-size: 34px; color: var(--ink); }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="mark" href="/"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M3 12c4-4 8-4 12 0s8 4 14 0M3 21c4-4 8-4 12 0s8 4 14 0"/></svg>Saltwater</a>
+  <nav><a href="#">Walks</a><a href="#">Map</a><a href="#">Tides &amp; safety</a><a href="#">About</a><a class="button" href="#">This weekend</a></nav>
+</div></header>
+<section class="hero">
+  <video muted loop playsinline preload="none" poster="https://images.pexels.com/videos/20512871/pexels-photo-20512871.jpeg?auto=compress&cs=tinysrgb&w=1600" data-src="https://videos.pexels.com/video-files/20512871/20512871-sd_960_540_30fps.mp4" aria-label="Waves breaking over the Icebergs pool at Bondi"></video>
+  <div class="wrap lift">
+    <h1><span class="line"><span style="--i:0">Walk the</span></span><span class="line"><span style="--i:1">edge of <em>Sydney</em></span></span></h1>
+    <p class="rise" style="--i:2">Coastal walks from Bondi to the Royal National Park: walked, timed and written up, with where to swim at the end. Updated each season.</p>
+    <div class="actions rise" style="--i:3"><a class="button primary" href="/posts">Start with Bondi to Coogee</a><a class="button ghost" href="#">See every walk</a></div>
+  </div>
+  <div class="route-edge" aria-hidden="true"><svg viewBox="0 0 1440 120" preserveAspectRatio="none"><path class="path" d="M40 92 C 220 40, 360 108, 520 70 S 820 30, 980 76 S 1260 104, 1400 58" fill="none" stroke="#ffcf4d" stroke-width="4" stroke-linecap="round" stroke-dasharray="1700"/></svg>
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" style="position:absolute;inset:0"><g class="stop" style="--t:0"><circle cx="40" cy="92" r="7" fill="#ffcf4d"/></g><g class="stop" style="--t:.33"><circle cx="520" cy="70" r="6" fill="#ffcf4d"/></g><g class="stop" style="--t:.66"><circle cx="980" cy="76" r="6" fill="#ffcf4d"/></g><g class="stop" style="--t:1"><circle cx="1400" cy="58" r="7" fill="#ffcf4d"/></g></svg>
+    <div class="labels"><span style="left:40px">Bondi</span><span style="left:36%">Bronte</span><span style="left:68%">Clovelly</span><span style="right:40px">Coogee</span></div></div>
+  <div class="credit">Video: <a href="https://www.pexels.com/video/a-pool-with-waves-crashing-on-the-shore-20512871/">Edan Kwon</a>, Pexels</div>
+</section>
+<main>
+  <section class="walks"><div class="wrap">
+    <div class="eyebrow reveal">Five walks to start with</div>
+    <h2 class="reveal">Cliffs, pools<br>and lighthouses</h2>
+    <div class="grid">
+      <a class="card lift-card big reveal" href="/posts"><div class="pic"><img style="view-transition-name: walk-bondi" src="https://images.unsplash.com/photo-1721047178643-f3173c92cd6d?w=1600&q=75&auto=format&fit=crop" alt="A walker on the sandstone cliffs south of Bondi" loading="lazy"><span class="grade">Easy · stairs</span></div><div class="text"><h3>Bondi to Coogee</h3><p>Sydney's best-loved walk: six kilometres of headlands, ocean pools and beaches, with a swim at either end.</p><div class="facts"><span>6 km</span><span>2–3 hours</span><span>Bus back</span></div></div></a>
+      <a class="card lift-card small reveal" href="#"><div class="pic"><img src="https://images.unsplash.com/photo-1572811224088-af9bd40898af?w=1200&q=75&auto=format&fit=crop" alt="Sandstone cliffs at North Head, Manly" loading="lazy"><span class="grade">Moderate</span></div><div class="text"><h3>Spit to Manly</h3><div class="facts"><span>10 km</span><span>3–4 hours</span></div></div></a>
+      <a class="card lift-card small reveal" href="#"><div class="pic"><img src="https://images.unsplash.com/photo-1623322909259-14306fa63303?w=1200&q=75&auto=format&fit=crop" alt="Hornby Lighthouse on South Head" loading="lazy"><span class="grade">Easy</span></div><div class="text"><h3>South Head</h3><div class="facts"><span>1.5 km loop</span><span>45 min</span></div></div></a>
+      <a class="card lift-card wide reveal" href="#"><div class="pic"><img src="https://images.unsplash.com/photo-1784513435638-7325d4caef42?w=1600&q=75&auto=format&fit=crop" alt="Wedding Cake Rock above the ocean in the Royal National Park" loading="lazy"><span class="grade">Hard · two days</span></div><div class="text"><h3>The Coast Track</h3><p>Bundeena to Otford through the Royal National Park, past Wedding Cake Rock, seen from the track.</p><div class="facts"><span>26 km</span><span>2 days</span><span>Booking needed</span></div></div></a>
+      <a class="card lift-card wide reveal" href="#"><div class="pic"><img src="https://images.unsplash.com/photo-1553510102-c8aeb4db678f?w=1600&q=75&auto=format&fit=crop" alt="Turquoise water below the cliffs at Diamond Bay" loading="lazy"><span class="grade">Easy · stairs</span></div><div class="text"><h3>Bondi to Watsons Bay</h3><p>North from Bondi along the cliff tops, past Diamond Bay, to fish and chips by the harbour.</p><div class="facts"><span>6.5 km</span><span>2.5 hours</span><span>Ferry back</span></div></div></a>
+    </div>
+  </div></section>
+  <section class="log"><div class="wrap">
+    <div class="counts reveal"><div><b>5</b><span>Walks walked</span></div><div><b>49 km</b><span>On foot so far</span></div><div><b>12</b><span>Ocean pools</span></div><div><b>Spring</b><span>Last walked</span></div></div>
+    <div class="reveal-side"><h2>The field log</h2><ol>
+      <li><time>This week</time>Walked Bondi to Coogee again: the Tamarama stairs are open, Bronte pool was drained for cleaning.</li>
+      <li><time>Last week</time>Added the ferry times back from Watsons Bay, and a note on shade.</li>
+      <li><time>Spring</time>New photos of South Head after the track repairs.</li>
+    </ol></div>
+  </div></section>
+  <section class="band"><div class="wrap">
+    <h2 class="reveal-side">Before you<br>head out</h2>
+    <ul>
+      <li class="reveal"><b>The swell</b>Over two metres, rock pools and low ledges close. We say so at the top of each walk.</li>
+      <li class="reveal"><b>The heat</b>Most of these walks have no shade. Go early, carry two litres.</li>
+      <li class="reveal"><b>The way back</b>Every walk ends at a bus stop or a ferry wharf, and we name it.</li>
+      <li class="reveal"><b>Updated</b>Each walk shows when we last walked it and what had changed.</li>
+    </ul>
+  </div></section>
+  <section class="strip"><img class="zoom-in" src="https://images.unsplash.com/photo-1584868138762-fcae9e7d55b2?w=1600&q=75&auto=format&fit=crop" alt="Bondi Icebergs pool from above, waves breaking over its wall" loading="lazy"><blockquote class="reveal">“Start early, swim at the end, and the bus home feels like a reward.”<small>From our Bondi to Coogee notes · Photo: <a href="https://unsplash.com/photos/blue-and-brown-swimming-pool-beside-blue-and-white-ocean-water-during-daytime-eBQ7Uzux3qk">Kelvin Li</a></small></blockquote></section>
+</main>
+<footer><div class="wrap">
+  <div class="made"><div class="pinies"><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,33 L-13,50" stroke="#7D73D9" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="52" rx="6.5" ry="3.8" fill="#26215C" stroke="#7D73D9" stroke-width="2"/><path d="M12,33 L13,50" stroke="#7D73D9" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="52" rx="6.5" ry="3.8" fill="#26215C" stroke="#7D73D9" stroke-width="2"/><path d="M-27.309516212355263,17 Q-39.30951621235526,22 -41.30951621235526,31" stroke="#7D73D9" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M27.309516212355263,17 Q35.15475810617763,20 33,27" stroke="#7D73D9" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M0,-41 A41,41 0 1 1 0,41 A41,41 0 1 1 0,-41 Z" fill="#AFA9EC" stroke="#7D73D9" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-11.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="-10.2" cy="-7.6" r="1.2" fill="#fff"/><ellipse cx="13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="14.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="15.8" cy="-7.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#26215C" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-roadmap"><g transform="translate(34,14) rotate(8)"><rect x="0" y="0" width="30" height="23" rx="3" fill="#F7F5EE" stroke="#5F5E5A" stroke-width="1.6"/><path d="M5,18 C10,18 9,9 15,10 C21,11 22,5 25,5" stroke="#534AB7" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="5" cy="18" r="2" fill="#534AB7"/><circle cx="25" cy="5" r="2.4" fill="#E2533F"/></g></g><circle cx="-41.30951621235526" cy="31" r="4.6" fill="#AFA9EC" stroke="#7D73D9" stroke-width="2"/><circle cx="33" cy="27" r="4.6" fill="#AFA9EC" stroke="#7D73D9" stroke-width="2"/></g></svg></span><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,33 L-13,50" stroke="#45B08D" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="52" rx="6.5" ry="3.8" fill="#04342C" stroke="#45B08D" stroke-width="2"/><path d="M12,33 L13,50" stroke="#45B08D" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="52" rx="6.5" ry="3.8" fill="#04342C" stroke="#45B08D" stroke-width="2"/><path d="M-29,17 Q-41,22 -43,31" stroke="#45B08D" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M29,17 Q42,21.5 45,30" stroke="#45B08D" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-39.0,-22.0 Q-39,-39 -22.0,-39.0 L22.0,-39.0 Q39,-39 39.0,-22.0 L39.0,22.0 Q39,39 22.0,39.0 L-22.0,39.0 Q-39,39 -39.0,22.0 Z" fill="#9FE1CB" stroke="#45B08D" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-11.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="-10.2" cy="-7.6" r="1.2" fill="#fff"/><ellipse cx="13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="14.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="15.8" cy="-7.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#04342C" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-stopwatch"><g transform="translate(46,16)"><rect x="-3" y="-15" width="6" height="5" rx="1" fill="#5F5E5A"/><circle cx="0" cy="0" r="12" fill="#F7F5EE" stroke="#5F5E5A" stroke-width="2"/><path d="M0,0 L0,-7 M0,0 L5,3" stroke="#0F6E56" stroke-width="2.2" stroke-linecap="round"/></g></g><circle cx="-43" cy="31" r="4.6" fill="#9FE1CB" stroke="#45B08D" stroke-width="2"/><circle cx="45" cy="30" r="4.6" fill="#9FE1CB" stroke="#45B08D" stroke-width="2"/></g></svg></span><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-18,34 Q-26,46 -32,51" stroke="#D5684A" stroke-width="4.6" fill="none" stroke-linecap="round"/><ellipse cx="-35" cy="53" rx="6.5" ry="3.8" fill="#4A1B0C" stroke="#D5684A" stroke-width="2"/><path d="M18,34 Q26,46 32,51" stroke="#D5684A" stroke-width="4.6" fill="none" stroke-linecap="round"/><ellipse cx="35" cy="53" rx="6.5" ry="3.8" fill="#4A1B0C" stroke="#D5684A" stroke-width="2"/><path d="M-31.125,27 Q-33.0625,37 -25,51" stroke="#D5684A" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M31.125,27 Q33.0625,37 25,51" stroke="#D5684A" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-6.1,-38.5 Q0,-50 6.1,-38.5 L40.9,26.5 Q47,38 34.0,38.0 L-34.0,38.0 Q-47,38 -40.9,26.5 Z" fill="#F0997B" stroke="#D5684A" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-18" cy="21" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="18" cy="21" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-11" cy="7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-9.5" cy="8" r="3.80" fill="#2C2C2A"/><circle cx="-8.2" cy="6.4" r="1.2" fill="#fff"/><ellipse cx="11" cy="7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="12.5" cy="8" r="3.80" fill="#2C2C2A"/><circle cx="13.8" cy="6.4" r="1.2" fill="#fff"/></g><g><path d="M-8.00,23 Q0,28.00 8.00,23" stroke="#4A1B0C" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-laptop"><g transform="translate(0,44)"><rect x="-23" y="-14" width="46" height="23" rx="3" fill="#444441"/><path d="M-6,-8 l-5,5 l5,5 M6,-8 l5,5 l-5,5" stroke="#F7B79F" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="-28" y="8" width="56" height="5" rx="2" fill="#888780"/></g></g><circle cx="-25" cy="51" r="4.6" fill="#F0997B" stroke="#D5684A" stroke-width="2"/><circle cx="25" cy="51" r="4.6" fill="#F0997B" stroke="#D5684A" stroke-width="2"/></g></svg></span><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,33 L-13,50" stroke="#D99A2B" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="52" rx="6.5" ry="3.8" fill="#412402" stroke="#D99A2B" stroke-width="2"/><path d="M12,33 L13,50" stroke="#D99A2B" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="52" rx="6.5" ry="3.8" fill="#412402" stroke="#D99A2B" stroke-width="2"/><path d="M-24.41025641025641,17 Q-36.41025641025641,22 -38.41025641025641,31" stroke="#D99A2B" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M24.41025641025641,17 Q44.705128205128204,19.5 55,26" stroke="#D99A2B" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-26.9,-30.3 Q-22,-39 -12.0,-39.0 L12.0,-39.0 Q22,-39 26.9,-30.3 L39.1,-8.7 Q44,0 39.1,8.7 L26.9,30.3 Q22,39 12.0,39.0 L-12.0,39.0 Q-22,39 -26.9,30.3 L-39.1,8.7 Q-44,0 -39.1,-8.7 Z" fill="#FAC775" stroke="#D99A2B" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-11.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="-10.2" cy="-7.6" r="1.2" fill="#fff"/><ellipse cx="13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="14.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="15.8" cy="-7.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#412402" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-glass"><g transform="translate(44,14)"><circle cx="0" cy="0" r="10" fill="#E6F1FB" fill-opacity=".85" stroke="#5F5E5A" stroke-width="3"/><path d="M7,7 L16,17" stroke="#5F5E5A" stroke-width="4.4" stroke-linecap="round"/></g></g><circle cx="-38.41025641025641" cy="31" r="4.6" fill="#FAC775" stroke="#D99A2B" stroke-width="2"/><circle cx="55" cy="26" r="4.6" fill="#FAC775" stroke="#D99A2B" stroke-width="2"/></g></svg></span><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,28 L-13,45" stroke="#378ADD" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="47" rx="6.5" ry="3.8" fill="#042C53" stroke="#378ADD" stroke-width="2"/><path d="M12,28 L13,45" stroke="#378ADD" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="47" rx="6.5" ry="3.8" fill="#042C53" stroke="#378ADD" stroke-width="2"/><path d="M-19,17 Q-31,22 -33,31" stroke="#378ADD" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M19,17 Q31,22 33,31" stroke="#378ADD" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-11.3,-36.7 Q0,-48 11.3,-36.7 L36.7,-11.3 Q48,0 36.7,11.3 L11.3,36.7 Q0,48 -11.3,36.7 L-36.7,11.3 Q-48,0 -36.7,-11.3 Z" fill="#B5D4F4" stroke="#378ADD" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-19" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="19" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-12" cy="-6" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-10.5" cy="-5" r="3.80" fill="#2C2C2A"/><circle cx="-9.2" cy="-6.6" r="1.2" fill="#fff"/><ellipse cx="12" cy="-6" rx="7.5" ry="7.50" fill="#fff"/><circle cx="13.5" cy="-5" r="3.80" fill="#2C2C2A"/><circle cx="14.8" cy="-6.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#042C53" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-bulb"><g transform="translate(40,-26)"><path d="M0,-13 C-8,-13 -12,-7 -12,-2 C-12,3 -8,6 -6,9 L6,9 C8,6 12,3 12,-2 C12,-7 8,-13 0,-13 Z" fill="#FAEEDA" stroke="#5F5E5A" stroke-width="1.8" stroke-linejoin="round"/><rect x="-5" y="10" width="10" height="5" rx="1.5" fill="#5F5E5A"/><path d="M-3,3 L0,-3 L3,3" stroke="#BA7517" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g></g><circle cx="-33" cy="31" r="4.6" fill="#B5D4F4" stroke="#378ADD" stroke-width="2"/><circle cx="33" cy="31" r="4.6" fill="#B5D4F4" stroke="#378ADD" stroke-width="2"/></g></svg></span></div><p>Made by the Pinies in <a href="#">Piny</a>, on EmDash.<br>Walked and checked by people.</p></div>
+  <div class="credits">Photos on Unsplash and the video on Pexels, by <a href="https://unsplash.com/photos/a-view-of-a-beach-with-a-city-in-the-background-styDbdRnb1U">Dominic Kurniawan Suryaputra</a>, <a href="https://unsplash.com/photos/sea-cliff-during-daytime-GKrux4c4Sbc">Gary Runn</a>, <a href="https://unsplash.com/photos/white-cliffs-towering-over-a-deep-blue-ocean-hf23qR1E3dw">Matt Str</a>, <a href="https://unsplash.com/photos/a-red-and-white-lighthouse-sitting-on-top-of-a-cliff-next-to-the-ocean-vDBVSOp38yE">Steven Zhang</a>, <a href="https://unsplash.com/photos/blue-and-brown-swimming-pool-beside-blue-and-white-ocean-water-during-daytime-eBQ7Uzux3qk">Kelvin Li</a>, <a href="https://unsplash.com/photos/person-with-surf-board-walking-beside-seashore-Uy-sl6JCy6g">Colton Jones</a>, <a href="https://unsplash.com/photos/blue-body-of-water-near-cliff-YPZPUwJIwak">Jack Bass</a>, <a href="https://www.pexels.com/video/a-pool-with-waves-crashing-on-the-shore-20512871/">Edan Kwon</a>.</div>
+</div></footer>
+<script is:inline>
+// The Pinies' entrance: when a row of them comes into view, they play the next of the public site's four, in order,
+// remembered in this browser, never random. Reduced motion, no storage or no script: the Pinies simply stand there.
+(() => {
+  const order = ['walk', 'skid', 'drop', 'peek'];
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('still');
+  for (const row of document.querySelectorAll('.pinies')) {
+    row.querySelectorAll('.face').forEach((face, i) => face.style.setProperty('--i', String(i)));
+    if (still || !('IntersectionObserver' in window)) { row.dataset.shown = ''; continue; }
+    const seen = new IntersectionObserver(entries => {
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      seen.disconnect();
+      let next = 0;
+      try { next = (Number(localStorage.getItem('tm06-entrance-next')) || 0) % order.length; localStorage.setItem('tm06-entrance-next', String(next + 1)); } catch {}
+      row.dataset.entrance = row.dataset.play || order[next];
+      setTimeout(() => { row.dataset.shown = ''; delete row.dataset.entrance; }, 2600);
+    }, { threshold: 0.6 });
+    seen.observe(row);
+  }
+})();
+
+// A hero's loop: the poster shows first; the clip loads and plays only with motion allowed and the page visible.
+(() => {
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('still');
+  for (const video of document.querySelectorAll('video[data-src]')) {
+    if (still) continue;
+    video.src = video.dataset.src;
+    video.play().catch(() => {});
+  }
+})();
+</script>
+</body>
+</html>
