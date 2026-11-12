@@ -1,0 +1,30 @@
+---
+/**
+ * The coast clip behind the headline.
+ *
+ * The poster — the still frame from the clip's own page — is drawn first, so
+ * the hero is never empty and nothing is fetched for a reader who asked for
+ * less motion. Both addresses come from the home page content; the layout's
+ * script loads and plays the clip only when motion is allowed.
+ */
+interface Props {
+	src: string;
+	poster: string;
+	description: string;
+}
+
+const { src, poster, description } = Astro.props;
+---
+
+<div class="hero__media">
+	<video
+		muted
+		loop
+		playsinline
+		preload="none"
+		poster={poster}
+		data-src={src}
+		role="img"
+		aria-label={description}
+	></video>
+</div>

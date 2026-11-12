@@ -1,0 +1,12 @@
+---
+import PlainPage from "../components/PlainPage.astro";
+import { getPage } from "../lib/content";
+
+const page = await getPage("map");
+
+if (!page) {
+	return Astro.rewrite("/404");
+}
+---
+
+<PlainPage page={page} />

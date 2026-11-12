@@ -1,0 +1,32 @@
+---
+/**
+ * A plain page — about, the map, tides and safety — from the pages collection:
+ * its title, its intro and its text.
+ */
+import { PortableText } from "emdash/ui";
+import Site from "../layouts/Site.astro";
+import type { PageContent } from "../lib/content";
+
+interface Props {
+	page: PageContent;
+}
+
+const { page } = Astro.props;
+---
+
+<Site title={page.title} description={page.intro} variant="solid">
+	<main id="main">
+		<section class="page-hero">
+			<div class="wrap">
+				<h1>{page.title}</h1>
+				{page.intro && <p>{page.intro}</p>}
+			</div>
+		</section>
+
+		<section class="page-body">
+			<div class="wrap prose">
+				<PortableText value={page.body} />
+			</div>
+		</section>
+	</main>
+</Site>

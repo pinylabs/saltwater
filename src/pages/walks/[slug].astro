@@ -1,0 +1,161 @@
+---
+/**
+ * One walk, from its photograph down to the places it passes. The card that
+ * brought the reader here shares this page's hero, so the picture grows into
+ * place as the page changes.
+ */
+import { PortableText } from "emdash/ui";
+import Site from "../../layouts/Site.astro";
+import { getWalk } from "../../lib/content";
+
+const slug = Astro.params.slug;
+const found = slug ? await getWalk(slug) : null;
+
+if (!found) {
+	return Astro.rewrite("/404");
+}
+
+const { walk, stops, story } = found;
+const coming = walk.status !== "walked";
+const hero = walk.heroPhoto || walk.photo;
+
+const stats = [
+	{ value: walk.distance, label: "Distance" },
+	{ value: walk.duration, label: "Time" },
+	{ value: walk.grade, label: "Grade" },
+	{ value: walk.start, label: "Start" },
+	{ value: walk.finish, label: "Finish" },
+].filter((stat) => stat.value);
+---
+
+<Site
+	title={walk.title}
+	description={walk.summary || walk.comingNote || `${walk.title} on Saltwater`}
+	variant="hero"
+>
+	<main id="main">
+		<section class="walk-hero">
+			<img
+				class="walk-hero__media"
+				src={hero}
+				alt={walk.photoAlt}
+				style={`view-transition-name: walk-${walk.slug}`}
+			/>
+			<div class="wrap walk-hero__inner">
+				<p class="crumbs">
+					<a href="/walks">Walks</a>
+					{walk.region && <> › {walk.region}</>}
+				</p>
+				<h1 class="rise" style="--i:1">{walk.title}</h1>
+			</div>
+			{walk.photoCredit && (
+				<p class="walk-hero__credit">
+					Photo: <a href={walk.photoCreditUrl}>{walk.photoCredit}</a>
+				</p>
+			)}
+		</section>
+
+		{stats.length > 0 && (
+			<section class="stats" aria-label="The walk in numbers">
+				<div class="wrap stats__inner">
+					{stats.map((stat) => (
+						<div>
+							<b>{stat.value}</b>
+							<small>{stat.label}</small>
+						</div>
+					))}
+				</div>
+			</section>
+		)}
+
+		<section class="coming-panel" aria-label={coming ? "This walk is coming" : "This walk was checked"}>
+			<div class="wrap coming-panel__inner">
+				<strong>{coming ? "Coming" : "Walked"}</strong>
+				<p>
+					{coming
+						? walk.comingNote || "Nobody has walked this route for Saltwater yet."
+						: walk.summary}
+				</p>
+				<p class="coming-panel__checked">
+					{walk.lastChecked
+						? `Last checked ${walk.lastChecked}`
+						: "Last checked: no date yet"}
+				</p>
+			</div>
+		</section>
+
+		{story.length > 0 && (
+			<section class="story" aria-label="The walk in pictures">
+				<div class="story__stage">
+					{story.map((stop, index) => (
+						<img
+							src={stop.photo}
+							alt={stop.photoAlt}
+							loading={index === 0 ? "eager" : "lazy"}
+							decoding="async"
+							style={index === 0 ? undefined : `--timeline: --story-${index}`}
+						/>
+					))}
+				</div>
+				<div class="story__panels">
+					{story.map((stop, index) => (
+						<div class="story__panel" style={`--timeline: --story-${index}`}>
+							<h2>{stop.title}</h2>
+							{stop.text && <p>{stop.text}</p>}
+							{stop.photoCredit && (
+								<small>
+									Photo: <a href={stop.photoCreditUrl}>{stop.photoCredit}</a>
+								</small>
+							)}
+						</div>
+					))}
+				</div>
+			</section>
+		)}
+
+		<div class="wrap walk-body">
+			<article>
+				<PortableText value={walk.body} />
+			</article>
+
+			<aside class="walk-aside reveal">
+				{stops.length > 0 && (
+					<div class="route-card">
+						<h2>The route</h2>
+						<svg viewBox="0 0 240 300" fill="none" aria-hidden="true">
+							<path
+								d="M40 0 C70 40 30 70 60 100 S 40 160 80 190 S 60 260 110 300"
+								stroke="currentColor"
+								stroke-opacity=".15"
+								stroke-width="40"
+								stroke-linecap="round"></path>
+							<path
+								class="route-card__path"
+								d="M60 20 C90 50 50 80 80 110 S 60 170 100 200 S 90 250 130 280"
+								stroke="#0b4f6c"
+								stroke-width="5"
+								stroke-linecap="round"></path>
+							<g fill="#ffcf4d" stroke="#0d2230" stroke-width="2">
+								<circle cx="60" cy="20" r="7"></circle>
+								<circle cx="80" cy="110" r="6"></circle>
+								<circle cx="100" cy="200" r="6"></circle>
+								<circle cx="130" cy="280" r="7"></circle>
+							</g>
+						</svg>
+						<small>A sketch, not to scale.</small>
+						<ol>
+							{stops.map((stop) => <li>{stop}</li>)}
+						</ol>
+					</div>
+				)}
+
+				<div class="checked-box">
+					<b>{coming ? "Not walked yet" : "Last checked"}</b>
+					{walk.lastChecked
+						? `A person walked this route and checked it on ${walk.lastChecked}.`
+						: "No one has walked this route for Saltwater yet, so there is no date to show. It goes up once there is one."}
+				</div>
+			</aside>
+		</div>
+	</main>
+</Site>

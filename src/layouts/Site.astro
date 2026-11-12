@@ -1,0 +1,115 @@
+---
+/**
+ * The frame every Saltwater page shares: the fonts, the header over the
+ * coast, the footer with every photographer named, and the one script that
+ * starts the coast clip only when motion is allowed.
+ */
+import SiteFooter from "../components/SiteFooter.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import { getCredits, getHome, getSiteName } from "../lib/content";
+import "../styles/saltwater.css";
+
+interface Props {
+	/** The page's own title, after the site name. */
+	title: string;
+	description?: string;
+	/** `hero` puts the header over a photograph; `solid` sits it on sand. */
+	variant?: "hero" | "solid";
+}
+
+const {
+	title,
+	description = "Sydney's coastal walks, walked, timed and written up, with where to swim at the end.",
+	variant = "solid",
+} = Astro.props;
+
+const path = Astro.url.pathname;
+const [credits, home, siteName] = await Promise.all([
+	getCredits(),
+	getHome(),
+	getSiteName(),
+]);
+
+const pageTitle = title === siteName ? siteName : `${title} — ${siteName}`;
+const canonical = new URL(Astro.url.pathname, Astro.url.origin).href;
+---
+
+<!doctype html>
+<html lang="en-AU">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="color-scheme" content="light dark" />
+		<title>{pageTitle}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonical} />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical} />
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Sans:wght@400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap"
+		/>
+		<link
+			rel="alternate"
+			type="application/rss+xml"
+			title={siteName}
+			href="/rss.xml"
+		/>
+	</head>
+	<body>
+		<a class="skip-link" href="#main">Skip to content</a>
+		<SiteHeader variant={variant} siteName={siteName} path={path} />
+		<slot />
+		<SiteFooter
+			credits={credits}
+			made={home?.footerMade}
+			line={home?.footerLine}
+			siteName={siteName}
+		/>
+
+		<script is:inline>
+			// The coast clip. Its poster shows first, so the hero is never empty;
+			// the clip itself is fetched and played only when motion is allowed.
+			// Under prefers-reduced-motion it never plays, and it rests while the
+			// page is in a background tab.
+			(() => {
+				const still = window.matchMedia("(prefers-reduced-motion: reduce)");
+				const clips = Array.from(document.querySelectorAll("video[data-src]"));
+				if (clips.length === 0) return;
+
+				const start = (clip) => {
+					if (!clip.getAttribute("src")) {
+						clip.setAttribute("src", clip.dataset.src);
+					}
+					if (document.hidden) return;
+					const playing = clip.play();
+					if (playing && typeof playing.catch === "function") {
+						playing.catch(() => {});
+					}
+				};
+
+				const stop = (clip) => {
+					if (!clip.paused) clip.pause();
+				};
+
+				const sync = () => {
+					for (const clip of clips) {
+						if (still.matches) stop(clip);
+						else start(clip);
+					}
+				};
+
+				sync();
+				document.addEventListener("visibilitychange", sync);
+				if (typeof still.addEventListener === "function") {
+					still.addEventListener("change", sync);
+				}
+			})();
+		</script>
+	</body>
+</html>

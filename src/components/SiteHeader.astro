@@ -1,0 +1,42 @@
+---
+/**
+ * The mark and the four ways through the site. The header sits over the
+ * photograph on the home and walk pages, and on the sand everywhere else.
+ *
+ * The design hides the links on a phone, which would leave About, the map and
+ * the safety notes unreachable there, so on a narrow screen they drop to a
+ * second row under the mark instead of disappearing.
+ */
+interface Props {
+	variant?: "hero" | "solid";
+	siteName: string;
+	path: string;
+}
+
+const { variant = "solid", siteName, path } = Astro.props;
+
+const atWalks = path === "/walks" || path.startsWith("/walks/");
+const atMap = path === "/map";
+const atSafety = path === "/tides-and-safety";
+const atAbout = path === "/about";
+
+const current = (active: boolean) => (active ? "page" : undefined);
+---
+
+<header class:list={["site-header", variant === "hero" && "site-header--hero", variant === "solid" && "site-header--solid"]}>
+	<div class="wrap site-header__inner">
+		<a class="mark" href="/" aria-label={`${siteName}, home`}>
+			<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
+				<path d="M3 12c4-4 8-4 12 0s8 4 14 0M3 21c4-4 8-4 12 0s8 4 14 0"></path>
+			</svg>
+			{siteName}
+		</a>
+		<nav class="site-nav" aria-label="Main">
+			<a class="site-nav__link" href="/walks" aria-current={current(atWalks)}>Walks</a>
+			<a class="site-nav__link" href="/map" aria-current={current(atMap)}>Map</a>
+			<a class="site-nav__link" href="/tides-and-safety" aria-current={current(atSafety)}>Tides &amp; safety</a>
+			<a class="site-nav__link" href="/about" aria-current={current(atAbout)}>About</a>
+		</nav>
+		<a class="site-nav__cta" href="/walks">This weekend</a>
+	</div>
+</header>

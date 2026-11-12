@@ -1,0 +1,54 @@
+---
+/**
+ * One card in the home page's mosaic: the photograph, its grade, the photographer,
+ * the walk's facts, and — while nobody has walked it yet — the plain note that
+ * says so, with the date it was last checked.
+ */
+import type { Walk } from "../lib/content";
+
+interface Props {
+	walk: Walk;
+}
+
+const { walk } = Astro.props;
+
+const walked = walk.status === "walked";
+const badge = walked ? "Walked" : "Coming";
+const note = walked
+	? walk.lastChecked
+		? `Last checked ${walk.lastChecked}.`
+		: "Walked, no check date yet."
+	: walk.lastChecked
+		? `Not walked yet · Last checked ${walk.lastChecked}.`
+		: "Not walked yet · Last checked: no date yet.";
+
+const facts = [walk.distance, walk.duration, walk.transport].filter(Boolean);
+---
+
+<a
+	class:list={["card", "lift-card", `card--${walk.cardSize}`, "reveal"]}
+	href={`/walks/${walk.slug}`}
+>
+	<div class="card__pic">
+		<img
+			src={walk.photo}
+			alt={walk.photoAlt}
+			loading="lazy"
+			decoding="async"
+			style={`view-transition-name: walk-${walk.slug}`}
+		/>
+		{walk.grade && <span class="card__grade">{walk.grade}</span>}
+		<span class="card__status">{badge}</span>
+		{walk.photoCredit && <span class="card__credit">Photo: {walk.photoCredit}</span>}
+	</div>
+	<div class="card__text">
+		<h3>{walk.title}</h3>
+		{walk.summary && <p class="card__summary">{walk.summary}</p>}
+		{facts.length > 0 && (
+			<p class="card__facts">
+				{facts.map((fact) => <span>{fact}</span>)}
+			</p>
+		)}
+		<p class="card__coming">{note}</p>
+	</div>
+</a>

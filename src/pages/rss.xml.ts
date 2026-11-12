@@ -1,71 +1,56 @@
+/**
+ * The walks as a feed. Every walk is listed, including the ones still coming,
+ * because the note that says so is part of the walk's page.
+ */
 import type { APIRoute } from "astro";
-import { getEmDashCollection, getSiteSettings } from "emdash";
+import { getSiteName, getWalks } from "../lib/content";
 
-import { getSiteLocale } from "../utils/locale";
-import { resolveBlogSiteIdentity } from "../utils/site-identity";
+const escape = (value: string) =>
+	value
+		.replaceAll("&", "&amp;")
+		.replaceAll("<", "&lt;")
+		.replaceAll(">", "&gt;")
+		.replaceAll('"', "&quot;");
 
-export const GET: APIRoute = async ({ site, url }) => {
-	const siteUrl = site ?? new URL(url.origin);
-	const { siteTitle, siteTagline } = resolveBlogSiteIdentity(await getSiteSettings());
+export const GET: APIRoute = async ({ url }) => {
+	const [walks, siteName] = await Promise.all([getWalks(), getSiteName()]);
+	const origin = url.origin;
 
-	const { entries: posts } = await getEmDashCollection("posts", {
-		orderBy: { published_at: "desc" },
-		limit: 20,
-	});
-
-	const items = posts
-		.map((post) => {
-			if (!post.data.publishedAt) return null;
-			const pubDate = post.data.publishedAt.toUTCString();
-
-			const postUrl = new URL(`/posts/${post.id}`, siteUrl).href;
-			const title = escapeXml(post.data.title || "Untitled");
-			const description = escapeXml(post.data.excerpt || "");
-
-			return `    <item>
-      <title>${title}</title>
-      <link>${postUrl}</link>
-      <guid isPermaLink="true">${postUrl}</guid>
-      <pubDate>${pubDate}</pubDate>
-      <description>${description}</description>
-    </item>`;
+	const items = walks
+		.map((walk) => {
+			const link = `${origin}/walks/${walk.slug}`;
+			const description =
+				walk.summary ||
+				walk.comingNote ||
+				`${walk.title}, on Sydney's coast.`;
+			return [
+				"<item>",
+				`<title>${escape(walk.title)}</title>`,
+				`<link>${escape(link)}</link>`,
+				`<guid>${escape(link)}</guid>`,
+				`<description>${escape(description)}</description>`,
+				"</item>",
+			].join("");
 		})
-		.filter(Boolean)
-		.join("\n");
+		.join("");
 
-	const rss = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>${escapeXml(siteTitle)}</title>
-    <description>${escapeXml(siteTagline)}</description>
-	<link>${siteUrl.href}</link>
-	<atom:link href="${new URL("/rss.xml", siteUrl).href}" rel="self" type="application/rss+xml"/>
-    <language>${getSiteLocale() ?? "en-us"}</language>
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-${items}
-  </channel>
-</rss>`;
+	const feed = [
+		'<?xml version="1.0" encoding="UTF-8"?>',
+		'<rss version="2.0">',
+		"<channel>",
+		`<title>${escape(siteName)}</title>`,
+		`<link>${escape(origin)}</link>`,
+		`<description>${escape("Sydney's coastal walks, walked, timed and written up.")}</description>`,
+		"<language>en-au</language>",
+		items,
+		"</channel>",
+		"</rss>",
+	].join("");
 
-	return new Response(rss, {
+	return new Response(feed, {
 		headers: {
-			"Content-Type": "application/rss+xml; charset=utf-8",
+			"Content-Type": "application/xml; charset=utf-8",
 			"Cache-Control": "public, max-age=3600",
 		},
 	});
 };
-
-const XML_ESCAPE_PATTERNS = [
-	[/&/g, "&amp;"],
-	[/</g, "&lt;"],
-	[/>/g, "&gt;"],
-	[/"/g, "&quot;"],
-	[/'/g, "&apos;"],
-] as const;
-
-function escapeXml(str: string): string {
-	let result = str;
-	for (const [pattern, replacement] of XML_ESCAPE_PATTERNS) {
-		result = result.replace(pattern, replacement);
-	}
-	return result;
-}

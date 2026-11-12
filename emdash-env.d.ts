@@ -5,12 +5,13 @@
 
 import type { BylineSummary, ContentBylineCredit, TaxonomyTerm, PortableTextBlock } from "emdash";
 
-export interface Page {
+export interface Counter {
   id: string;
   slug: string | null;
   status: string;
-  title: string;
-  content?: PortableTextBlock[];
+  value: string;
+  label: string;
+  order?: number;
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date | null;
@@ -19,14 +20,152 @@ export interface Page {
   terms?: Record<string, TaxonomyTerm[]>;
 }
 
-export interface Post {
+export interface Home {
   id: string;
   slug: string | null;
   status: string;
   title: string;
-  featured_image?: { id: string; src?: string; alt?: string; caption?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown>; darkVariant?: { id: string; src?: string; alt?: string; caption?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> } };
-  content?: PortableTextBlock[];
-  excerpt?: string;
+  hero_line_1?: string;
+  hero_line_2?: string;
+  hero_highlight?: string;
+  hero_intro?: string;
+  hero_cta_label?: string;
+  hero_cta_href?: string;
+  hero_cta2_label?: string;
+  hero_cta2_href?: string;
+  clip_url?: string;
+  clip_poster?: string;
+  clip_alt?: string;
+  clip_credit?: string;
+  clip_credit_url?: string;
+  walks_eyebrow?: string;
+  walks_heading_1?: string;
+  walks_heading_2?: string;
+  walks_note?: string;
+  log_heading?: string;
+  quote?: string;
+  quote_attribution?: string;
+  quote_photo?: string;
+  quote_photo_alt?: string;
+  quote_credit?: string;
+  quote_credit_url?: string;
+  band_heading_1?: string;
+  band_heading_2?: string;
+  footer_made?: string;
+  footer_line?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  byline?: BylineSummary | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
+export interface LogEntry {
+  id: string;
+  slug: string | null;
+  status: string;
+  when: string;
+  text: string;
+  order?: number;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  byline?: BylineSummary | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
+export interface Page {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  intro?: string;
+  body?: PortableTextBlock[];
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  byline?: BylineSummary | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
+export interface SafetyNote {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  text: string;
+  order?: number;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  byline?: BylineSummary | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
+export interface StoryStop {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  walk: string;
+  order?: number;
+  text?: string;
+  photo?: string;
+  photo_alt?: string;
+  photo_credit?: string;
+  photo_credit_url?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  byline?: BylineSummary | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
+export interface WalkStop {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  walk: string;
+  order?: number;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  byline?: BylineSummary | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
+export interface Walk {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  region?: string;
+  grade?: "Easy" | "Moderate" | "Hard";
+  grade_note?: string;
+  distance?: string;
+  duration?: string;
+  transport?: string;
+  summary?: string;
+  photo?: string;
+  photo_alt?: string;
+  photo_credit?: string;
+  photo_credit_url?: string;
+  hero_photo?: string;
+  card_size?: "big" | "small" | "wide";
+  order?: number;
+  walk_status?: "coming" | "walked";
+  coming_note?: string;
+  last_checked?: string;
+  start?: string;
+  finish?: string;
+  body?: PortableTextBlock[];
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date | null;
@@ -37,7 +176,13 @@ export interface Post {
 
 declare module "emdash" {
   interface EmDashCollections {
+    counters: Counter;
+    home: Home;
+    log_entries: LogEntry;
     pages: Page;
-    posts: Post;
+    safety_notes: SafetyNote;
+    story_stops: StoryStop;
+    walk_stops: WalkStop;
+    walks: Walk;
   }
 }

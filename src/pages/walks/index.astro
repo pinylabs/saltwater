@@ -1,0 +1,66 @@
+---
+/**
+ * Every walk, in one list: the photograph, the facts, and the plain note that
+ * says whether it has been walked yet.
+ */
+import Site from "../../layouts/Site.astro";
+import { getHome, getWalks } from "../../lib/content";
+
+const [walks, home] = await Promise.all([getWalks(), getHome()]);
+---
+
+<Site
+	title="Every walk"
+	description="All five of Sydney's coastal walks on Saltwater, with their distance, grade and whether they have been walked yet."
+	variant="solid"
+>
+	<main id="main">
+		<section class="page-hero">
+			<div class="wrap">
+				{home?.walksEyebrow && <p class="eyebrow">{home.walksEyebrow}</p>}
+				<h1>Every walk</h1>
+				{home?.walksNote && <p>{home.walksNote}</p>}
+			</div>
+		</section>
+
+		<div class="wrap">
+			<ul class="walk-list">
+				{walks.map((walk) => {
+					const coming = walk.status !== "walked";
+					const facts = [walk.grade, walk.distance, walk.duration].filter(Boolean);
+					return (
+						<li>
+							<a class="walk-row lift-card" href={`/walks/${walk.slug}`}>
+								<div class="walk-row__pic">
+									<img
+										src={walk.photo}
+										alt={walk.photoAlt}
+										loading="lazy"
+										decoding="async"
+										style={`view-transition-name: walk-${walk.slug}`}
+									/>
+								</div>
+								<div>
+									<h2>{walk.title}</h2>
+									{walk.summary && <p class="walk-row__meta">{walk.summary}</p>}
+									{facts.length > 0 && (
+										<p class="walk-row__facts">
+											{facts.map((fact) => <span>{fact}</span>)}
+										</p>
+									)}
+									<p class="walk-row__meta">
+										{coming ? "Coming: not walked yet" : "Walked"}
+										{walk.lastChecked
+											? ` · Last checked ${walk.lastChecked}`
+											: " · Last checked: no date yet"}
+									</p>
+								</div>
+								<span class="walk-row__go">Read the walk</span>
+							</a>
+						</li>
+					);
+				})}
+			</ul>
+		</div>
+	</main>
+</Site>

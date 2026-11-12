@@ -1,0 +1,42 @@
+---
+/**
+ * Who made the site, and every photographer and film-maker whose work is
+ * linked from here — named, with the page it came from. Nothing is copied into
+ * this site; the credits are the link.
+ */
+import PiniesFaces from "./PiniesFaces.astro";
+import type { Credit } from "../lib/content";
+
+interface Props {
+	credits: Credit[];
+	made?: string;
+	line?: string;
+	siteName: string;
+}
+
+const { credits, made, line, siteName } = Astro.props;
+---
+
+<footer class="footer">
+	<div class="wrap footer__inner">
+		<div class="footer__made">
+			<PiniesFaces />
+			<p>
+				{made ?? "Made by the Pinies in Piny, on EmDash."}
+				{line && <><br />{line}</>}
+			</p>
+		</div>
+		<p class="footer__credits">
+			Photos on <a href="https://unsplash.com/license">Unsplash</a> and the video
+			on <a href="https://www.pexels.com/license/">Pexels</a>, by{" "}
+			{
+				credits.map((credit, index) => (
+					<>
+						{index > 0 && (index === credits.length - 1 ? " and " : ", ")}
+						<a href={credit.url}>{credit.name}</a>
+					</>
+				))
+			}. Linked from their pages, never copied into {siteName}.
+		</p>
+	</div>
+</footer>

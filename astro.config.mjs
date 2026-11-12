@@ -1,7 +1,7 @@
 import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
 import { d1, r2 } from "@emdash-cms/cloudflare";
-import { defineConfig, fontProviders } from "astro/config";
+import { defineConfig } from "astro/config";
 import emdash from "emdash/astro";
 
 export default defineConfig({
@@ -18,14 +18,9 @@ export default defineConfig({
 			storage: r2({ binding: "MEDIA" }),
 		}),
 	],
-	fonts: [
-		{
-			provider: fontProviders.google(),
-			name: "JetBrains Mono",
-			cssVariable: "--font-mono",
-			weights: [400, 500],
-			fallbacks: ["monospace"],
-		},
-	],
+	// The site's three faces — Bricolage Grotesque, Newsreader and Instrument
+	// Sans — come from the stylesheet link in src/layouts/Site.astro, because
+	// the headings need Bricolage's condensed width axis (font-stretch 75%),
+	// which the variable-font pipeline here does not ask Google for.
 	devToolbar: { enabled: false },
 });

@@ -3,28 +3,30 @@
 	"version": "1",
 	"meta": {
 		"name": "Saltwater",
-		"description": "Sydney's coastal walks: a photo-led publication of walks, written up with where to swim at the end",
-		"author": "Piny"
+		"description": "Sydney's coastal walks, walked, timed and written up, with where to swim at the end",
+		"author": "The Pinies"
 	},
 	"settings": {
 		"title": "Saltwater",
-		"tagline": "Sydney's coastal walks"
+		"tagline": "Sydney's coastal walks, walked, timed and written up.",
+		"postsPerPage": 12,
+		"dateFormat": "d MMMM yyyy",
+		"timezone": "Australia/Sydney"
 	},
 	"collections": [
 		{
-			"slug": "posts",
-			"label": "Posts",
-			"labelSingular": "Post",
-			"urlPattern": "/posts/{slug}",
-			"supports": [
-				"drafts",
-				"revisions",
-				"preview",
-				"scheduling",
-				"search",
-				"seo"
-			],
+			"slug": "walks",
+			"label": "Walks",
+			"labelSingular": "Walk",
+			"description": "The coastal walks: the card on the home page and the full write-up.",
+			"urlPattern": "/walks/{slug}",
+			"supports": ["drafts", "revisions", "preview", "search", "seo"],
 			"commentsEnabled": true,
+			"titleField": "title",
+			"dateField": "last_checked",
+			"admin": {
+				"listColumns": ["title", "grade", "distance", "walk_status"]
+			},
 			"fields": [
 				{
 					"slug": "title",
@@ -34,679 +36,390 @@
 					"searchable": true
 				},
 				{
-					"slug": "featured_image",
-					"label": "Featured Image",
-					"type": "image"
+					"slug": "region",
+					"label": "Region",
+					"type": "string",
+					"helpText": "Where the walk is, for the breadcrumb: Eastern beaches, Royal National Park."
 				},
 				{
-					"slug": "content",
-					"label": "Content",
-					"type": "portableText",
+					"slug": "grade",
+					"label": "Grade",
+					"type": "select",
+					"validation": { "options": ["Easy", "Moderate", "Hard"] }
+				},
+				{
+					"slug": "grade_note",
+					"label": "Grade note",
+					"type": "string",
+					"helpText": "Shown after the grade on the card, such as stairs or two days."
+				},
+				{
+					"slug": "distance",
+					"label": "Distance",
+					"type": "string",
+					"helpText": "As written on the card, such as 6 km."
+				},
+				{
+					"slug": "duration",
+					"label": "Duration",
+					"type": "string",
+					"helpText": "As written on the card, such as 2-3 hours."
+				},
+				{
+					"slug": "transport",
+					"label": "The way back",
+					"type": "string",
+					"helpText": "How the walk ends, such as Bus back or Ferry back."
+				},
+				{
+					"slug": "summary",
+					"label": "Summary",
+					"type": "text",
 					"searchable": true
 				},
 				{
-					"slug": "excerpt",
-					"label": "Excerpt",
-					"type": "text"
+					"slug": "photo",
+					"label": "Card photo address",
+					"type": "url",
+					"helpText": "The photo's own address at Unsplash; linked, never copied."
+				},
+				{
+					"slug": "photo_alt",
+					"label": "Photo description",
+					"type": "string"
+				},
+				{
+					"slug": "photo_credit",
+					"label": "Photographer",
+					"type": "string"
+				},
+				{
+					"slug": "photo_credit_url",
+					"label": "Photographer's page",
+					"type": "url"
+				},
+				{
+					"slug": "hero_photo",
+					"label": "Walk page hero photo address",
+					"type": "url",
+					"helpText": "The same photo at hero size, when the walk page uses one."
+				},
+				{
+					"slug": "card_size",
+					"label": "Mosaic size",
+					"type": "select",
+					"validation": { "options": ["big", "small", "wide"] }
+				},
+				{
+					"slug": "order",
+					"label": "Order",
+					"type": "number",
+					"helpText": "Left to right and top to bottom in the mosaic."
+				},
+				{
+					"slug": "walk_status",
+					"label": "Walked yet?",
+					"type": "select",
+					"validation": { "options": ["coming", "walked"] },
+					"defaultValue": "coming"
+				},
+				{
+					"slug": "coming_note",
+					"label": "Coming note",
+					"type": "text",
+					"helpText": "Said plainly on the walk page while the walk is still coming."
+				},
+				{
+					"slug": "last_checked",
+					"label": "Last checked",
+					"type": "datetime",
+					"helpText": "The date a person last walked and checked the route. Leave empty until someone has."
+				},
+				{
+					"slug": "start",
+					"label": "Starts at",
+					"type": "string"
+				},
+				{
+					"slug": "finish",
+					"label": "Ends at",
+					"type": "string"
+				},
+				{
+					"slug": "body",
+					"label": "The write-up",
+					"type": "portableText",
+					"searchable": true
 				}
+			]
+		},
+		{
+			"slug": "walk_stops",
+			"label": "Walk stops",
+			"labelSingular": "Walk stop",
+			"description": "The places a walk passes, in order, for the route card.",
+			"routable": false,
+			"supports": ["drafts"],
+			"titleField": "title",
+			"fields": [
+				{ "slug": "title", "label": "Place", "type": "string", "required": true },
+				{
+					"slug": "walk",
+					"label": "Walk slug",
+					"type": "string",
+					"required": true,
+					"helpText": "The walk this stop belongs to, by its slug."
+				},
+				{ "slug": "order", "label": "Order", "type": "number" }
+			]
+		},
+		{
+			"slug": "story_stops",
+			"label": "Photo story stops",
+			"labelSingular": "Photo story stop",
+			"description": "The photographs a walk page scrolls through, each with its credit.",
+			"routable": false,
+			"supports": ["drafts"],
+			"titleField": "title",
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true },
+				{
+					"slug": "walk",
+					"label": "Walk slug",
+					"type": "string",
+					"required": true,
+					"helpText": "The walk whose page this stop belongs to."
+				},
+				{ "slug": "order", "label": "Order", "type": "number" },
+				{ "slug": "text", "label": "Text", "type": "text" },
+				{ "slug": "photo", "label": "Photo address", "type": "url" },
+				{ "slug": "photo_alt", "label": "Photo description", "type": "string" },
+				{ "slug": "photo_credit", "label": "Photographer", "type": "string" },
+				{ "slug": "photo_credit_url", "label": "Photographer's page", "type": "url" }
+			]
+		},
+		{
+			"slug": "log_entries",
+			"label": "Field log",
+			"labelSingular": "Field log entry",
+			"description": "Short notes on the home page about what is being walked and written next.",
+			"routable": false,
+			"supports": ["drafts"],
+			"titleField": "when",
+			"fields": [
+				{ "slug": "when", "label": "When", "type": "string", "required": true },
+				{ "slug": "text", "label": "What", "type": "text", "required": true },
+				{ "slug": "order", "label": "Order", "type": "number" }
+			]
+		},
+		{
+			"slug": "safety_notes",
+			"label": "Safety notes",
+			"labelSingular": "Safety note",
+			"description": "The short notes in the yellow band on the home page.",
+			"routable": false,
+			"supports": ["drafts"],
+			"titleField": "title",
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true },
+				{ "slug": "text", "label": "Text", "type": "text", "required": true },
+				{ "slug": "order", "label": "Order", "type": "number" }
+			]
+		},
+		{
+			"slug": "counters",
+			"label": "Counters",
+			"labelSingular": "Counter",
+			"description": "The four blue boxes in the field log on the home page.",
+			"routable": false,
+			"supports": ["drafts"],
+			"titleField": "label",
+			"fields": [
+				{ "slug": "value", "label": "Big number", "type": "string", "required": true },
+				{ "slug": "label", "label": "Label", "type": "string", "required": true },
+				{ "slug": "order", "label": "Order", "type": "number" }
+			]
+		},
+		{
+			"slug": "home",
+			"label": "Home page",
+			"labelSingular": "Home page",
+			"description": "The words and the clip on the home page. One entry.",
+			"routable": false,
+			"supports": ["revisions"],
+			"titleField": "title",
+			"fields": [
+				{ "slug": "title", "label": "Name", "type": "string", "required": true },
+				{ "slug": "hero_line_1", "label": "Headline, first line", "type": "string" },
+				{ "slug": "hero_line_2", "label": "Headline, second line", "type": "string" },
+				{ "slug": "hero_highlight", "label": "The yellow word", "type": "string" },
+				{ "slug": "hero_intro", "label": "Headline paragraph", "type": "text" },
+				{ "slug": "hero_cta_label", "label": "Main button", "type": "string" },
+				{ "slug": "hero_cta_href", "label": "Main button address", "type": "string" },
+				{ "slug": "hero_cta2_label", "label": "Second button", "type": "string" },
+				{ "slug": "hero_cta2_href", "label": "Second button address", "type": "string" },
+				{ "slug": "clip_url", "label": "Coast clip address", "type": "url" },
+				{ "slug": "clip_poster", "label": "Coast clip poster address", "type": "url" },
+				{ "slug": "clip_alt", "label": "Coast clip description", "type": "string" },
+				{ "slug": "clip_credit", "label": "Clip by", "type": "string" },
+				{ "slug": "clip_credit_url", "label": "Clip's page", "type": "url" },
+				{ "slug": "walks_eyebrow", "label": "Mosaic eyebrow", "type": "string" },
+				{ "slug": "walks_heading_1", "label": "Mosaic heading, first line", "type": "string" },
+				{ "slug": "walks_heading_2", "label": "Mosaic heading, second line", "type": "string" },
+				{ "slug": "walks_note", "label": "Mosaic note", "type": "text" },
+				{ "slug": "log_heading", "label": "Field log heading", "type": "string" },
+				{ "slug": "quote", "label": "Quote", "type": "text" },
+				{ "slug": "quote_attribution", "label": "Quote credit", "type": "string" },
+				{ "slug": "quote_photo", "label": "Quote photo address", "type": "url" },
+				{ "slug": "quote_photo_alt", "label": "Quote photo description", "type": "string" },
+				{ "slug": "quote_credit", "label": "Quote photo by", "type": "string" },
+				{ "slug": "quote_credit_url", "label": "Quote photo's page", "type": "url" },
+				{ "slug": "band_heading_1", "label": "Yellow band heading, first line", "type": "string" },
+				{ "slug": "band_heading_2", "label": "Yellow band heading, second line", "type": "string" },
+				{ "slug": "footer_made", "label": "Footer, who made it", "type": "string" },
+				{ "slug": "footer_line", "label": "Footer line", "type": "string" }
 			]
 		},
 		{
 			"slug": "pages",
 			"label": "Pages",
 			"labelSingular": "Page",
-			"urlPattern": "/pages/{slug}",
-			"supports": [
-				"drafts",
-				"revisions",
-				"preview",
-				"search",
-				"seo"
-			],
+			"description": "The plain pages: about, the map, and tides and safety.",
+			"urlPattern": "/{slug}",
+			"supports": ["drafts", "revisions", "preview", "seo"],
+			"titleField": "title",
 			"fields": [
-				{
-					"slug": "title",
-					"label": "Title",
-					"type": "string",
-					"required": true,
-					"searchable": true
-				},
-				{
-					"slug": "content",
-					"label": "Content",
-					"type": "portableText",
-					"searchable": true
-				}
-			]
-		}
-	],
-	"taxonomies": [
-		{
-			"name": "category",
-			"label": "Categories",
-			"labelSingular": "Category",
-			"hierarchical": true,
-			"collections": [
-				"posts"
-			],
-			"terms": [
-				{
-					"slug": "walks",
-					"label": "Walks"
-				},
-				{
-					"slug": "field-log",
-					"label": "Field log"
-				}
-			]
-		},
-		{
-			"name": "tag",
-			"label": "Tags",
-			"labelSingular": "Tag",
-			"hierarchical": false,
-			"collections": [
-				"posts"
-			],
-			"terms": [
-				{
-					"slug": "eastern-beaches",
-					"label": "Eastern beaches"
-				},
-				{
-					"slug": "harbour",
-					"label": "Harbour"
-				},
-				{
-					"slug": "royal-national-park",
-					"label": "Royal National Park"
-				},
-				{
-					"slug": "ocean-pools",
-					"label": "Ocean pools"
-				},
-				{
-					"slug": "lighthouses",
-					"label": "Lighthouses"
-				},
-				{
-					"slug": "stairs",
-					"label": "Stairs"
-				},
-				{
-					"slug": "bus-back",
-					"label": "Bus back"
-				},
-				{
-					"slug": "ferry-back",
-					"label": "Ferry back"
-				},
-				{
-					"slug": "overnight",
-					"label": "Overnight"
-				}
-			]
-		}
-	],
-	"bylines": [
-		{
-			"id": "byline-saltwater",
-			"slug": "saltwater",
-			"displayName": "The Saltwater walkers"
-		}
-	],
-	"menus": [
-		{
-			"name": "primary",
-			"label": "Primary Navigation",
-			"items": [
-				{
-					"type": "custom",
-					"label": "Walks",
-					"url": "/category/walks"
-				},
-				{
-					"type": "custom",
-					"label": "Tides & safety",
-					"url": "/pages/tides-and-safety"
-				},
-				{
-					"type": "custom",
-					"label": "About",
-					"url": "/pages/about"
-				},
-				{
-					"type": "custom",
-					"label": "Field log",
-					"url": "/category/field-log"
-				}
-			]
-		}
-	],
-	"widgetAreas": [
-		{
-			"name": "sidebar",
-			"label": "Sidebar",
-			"description": "Widget area displayed on single post pages",
-			"widgets": [
-				{
-					"type": "component",
-					"componentId": "core:search",
-					"title": "Search"
-				},
-				{
-					"type": "component",
-					"componentId": "core:categories",
-					"title": "Categories"
-				},
-				{
-					"type": "component",
-					"componentId": "core:tags",
-					"title": "Tags"
-				},
-				{
-					"type": "component",
-					"componentId": "core:recent-posts",
-					"title": "Recent Posts",
-					"props": {
-						"count": 5,
-						"showDate": true
-					}
-				},
-				{
-					"type": "component",
-					"componentId": "core:archives",
-					"title": "Archives",
-					"props": {
-						"type": "monthly",
-						"limit": 6
-					}
-				}
-			]
-		},
-		{
-			"name": "footer",
-			"label": "Footer",
-			"description": "Widget area displayed in the site footer",
-			"widgets": [
-				{
-					"type": "content",
-					"title": "About",
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Coastal walks from Bondi to the Royal National Park: walked, timed and written up, with where to swim at the end. Updated each season.",
-									"_key": "k1"
-								}
-							],
-							"_key": "k0"
-						}
-					]
-				}
-			]
-		}
-	],
-	"sections": [
-		{
-			"slug": "before-you-head-out",
-			"title": "Before you head out",
-			"description": "The short safety note that opens each walk",
-			"keywords": [
-				"safety",
-				"swell",
-				"heat",
-				"water"
-			],
-			"source": "theme",
-			"content": [
-				{
-					"_type": "block",
-					"style": "h2",
-					"children": [
-						{
-							"_type": "span",
-							"text": "Before you head out",
-							"_key": "k1"
-						}
-					],
-					"_key": "k0"
-				},
-				{
-					"_type": "block",
-					"style": "normal",
-					"children": [
-						{
-							"_type": "span",
-							"text": "Over two metres of swell, rock pools and low ledges close. Most of the walk has no shade: go early and carry two litres of water.",
-							"_key": "k3"
-						}
-					],
-					"_key": "k2"
-				}
-			]
-		},
-		{
-			"slug": "the-way-back",
-			"title": "The way back",
-			"description": "Where the walk ends and how to get home",
-			"keywords": [
-				"bus",
-				"ferry",
-				"return",
-				"transport"
-			],
-			"source": "theme",
-			"content": [
-				{
-					"_type": "block",
-					"style": "h2",
-					"children": [
-						{
-							"_type": "span",
-							"text": "The way back",
-							"_key": "k1"
-						}
-					],
-					"_key": "k0"
-				},
-				{
-					"_type": "block",
-					"style": "normal",
-					"children": [
-						{
-							"_type": "span",
-							"text": "Name the bus stop or ferry wharf where the walk ends, and check the timetable on the day before you set off.",
-							"_key": "k3"
-						}
-					],
-					"_key": "k2"
-				}
+				{ "slug": "title", "label": "Title", "type": "string", "required": true },
+				{ "slug": "intro", "label": "Intro", "type": "text" },
+				{ "slug": "body", "label": "Body", "type": "portableText", "searchable": true }
 			]
 		}
 	],
 	"content": {
-		"pages": [
-			{
-				"id": "about",
-				"slug": "about",
-				"status": "published",
-				"data": {
-					"title": "About",
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Saltwater is a guide to Sydney's coastal walks, from Bondi to the Royal National Park. Each walk is walked, timed and written up, with where to swim at the end, and updated each season.",
-									"_key": "k1"
-								}
-							],
-							"_key": "k0"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "How we write a walk",
-									"_key": "k3"
-								}
-							],
-							"_key": "k2"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Every walk opens with its distance, how long it took us and how you get home. The times are ours, walking steadily with stops for photos; add time for swims and for the stairs. Each walk shows when we last walked it and what had changed since.",
-									"_key": "k5"
-								}
-							],
-							"_key": "k4"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "What we do not check",
-									"_key": "k7"
-								}
-							],
-							"_key": "k6"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Tracks close after storms, in fire weather and for repairs, and pools are drained for cleaning. Check NSW National Parks and the local council for closures before you go.",
-									"_key": "k9"
-								}
-							],
-							"_key": "k8"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Credits",
-									"_key": "k11"
-								}
-							],
-							"_key": "k10"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Made by the Pinies in Piny, on EmDash. Walked and checked by people. Photos on Unsplash and the video on Pexels, by Dominic Kurniawan Suryaputra, Gary Runn, Matt Str, Steven Zhang, Kelvin Li, Colton Jones, Jack Bass and Edan Kwon.",
-									"_key": "k13"
-								}
-							],
-							"_key": "k12"
-						}
-					]
-				}
-			},
-			{
-				"id": "tides-and-safety",
-				"slug": "tides-and-safety",
-				"status": "published",
-				"data": {
-					"title": "Tides & safety",
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Sydney's coast is easy walking on a calm day and a different place in a big swell or a heatwave. Read this before you head out.",
-									"_key": "k1"
-								}
-							],
-							"_key": "k0"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The swell",
-									"_key": "k3"
-								}
-							],
-							"_key": "k2"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Over two metres, rock pools and low ledges close. We say so at the top of each walk. Waves on this coast come in sets, and a quiet ledge can be washed over without warning.",
-									"_key": "k5"
-								}
-							],
-							"_key": "k4"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The heat",
-									"_key": "k7"
-								}
-							],
-							"_key": "k6"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Most of these walks have no shade. Go early, carry two litres, and wear a hat.",
-									"_key": "k9"
-								}
-							],
-							"_key": "k8"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The way back",
-									"_key": "k11"
-								}
-							],
-							"_key": "k10"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Every walk ends at a bus stop or a ferry wharf, and we name it. Check the timetable before you set off.",
-									"_key": "k13"
-								}
-							],
-							"_key": "k12"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Updated",
-									"_key": "k15"
-								}
-							],
-							"_key": "k14"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Each walk shows when we last walked it and what had changed. Conditions change faster than we can walk them, so check the park and council alerts on the day.",
-									"_key": "k17"
-								}
-							],
-							"_key": "k16"
-						}
-					]
-				}
-			}
-		],
-		"posts": [
+		"walks": [
 			{
 				"id": "walk-bondi-to-coogee",
 				"slug": "bondi-to-coogee",
 				"status": "published",
 				"data": {
 					"title": "Bondi to Coogee",
-					"excerpt": "Sydney's best-loved walk: six kilometres of headlands, ocean pools and beaches, with a swim at either end.",
-					"featured_image": {
-						"$media": {
-							"url": "https://images.unsplash.com/photo-1721047178643-f3173c92cd6d?w=1600&q=80&fm=jpg&fit=max",
-							"alt": "A walker on the sandstone cliffs south of Bondi",
-							"filename": "bondi-to-coogee.jpg"
+					"region": "Eastern beaches",
+					"grade": "Easy",
+					"grade_note": "stairs",
+					"distance": "6 km",
+					"duration": "2–3 hours",
+					"transport": "Bus back",
+					"summary": "Sydney's best-loved walk: six kilometres of headlands, ocean pools and beaches, with a swim at either end.",
+					"photo": "https://images.unsplash.com/photo-1721047178643-f3173c92cd6d?w=1600&q=75&auto=format&fit=crop",
+					"photo_alt": "A walker on the sandstone cliffs south of Bondi",
+					"photo_credit": "Dominic Kurniawan Suryaputra",
+					"photo_credit_url": "https://unsplash.com/photos/a-view-of-a-beach-with-a-city-in-the-background-styDbdRnb1U",
+					"hero_photo": "https://images.unsplash.com/photo-1721047178643-f3173c92cd6d?w=2400&q=75&auto=format&fit=crop",
+					"card_size": "big",
+					"order": 1,
+					"walk_status": "coming",
+					"coming_note": "Nobody has walked this route for Saltwater yet, so there is no check date and no swim notes of ours. The route, the distance and the grade are here, and the write-up follows once someone has walked it.",
+					"start": "Bondi Icebergs",
+					"finish": "Coogee Beach",
+					"body": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "The walk begins at the Icebergs pool and ends at Coogee, six kilometres of headland later, with a swim at either end.",
+									"_key": "b1s1",
+									"marks": []
+								}
+							],
+							"_key": "b1"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "Bondi and the cliffs",
+									"_key": "b2s1",
+									"marks": []
+								}
+							],
+							"_key": "b2"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "The path climbs from the south end of the beach onto the sandstone. Keep to the fenced side: the ledges below are lovely and close in a big swell.",
+									"_key": "b3s1",
+									"marks": []
+								}
+							],
+							"_key": "b3"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "Tamarama and Bronte",
+									"_key": "b4s1",
+									"marks": []
+								}
+							],
+							"_key": "b4"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "Two small beaches, two steep sets of stairs. Bronte's rock pool is the quiet swim of the walk, and the park behind it has shade, water and toilets.",
+									"_key": "b5s1",
+									"marks": []
+								}
+							],
+							"_key": "b5"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "Waverley to Coogee",
+									"_key": "b6s1",
+									"marks": []
+								}
+							],
+							"_key": "b6"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "The cemetery on the cliff, Clovelly's long inlet, then Gordons Bay and down into Coogee, where the buses leave from the beach.",
+									"_key": "b7s1",
+									"marks": []
+								}
+							],
+							"_key": "b7"
 						}
-					},
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "6 km · 2–3 hours · Easy, with stairs · Bus back from Coogee.",
-									"_key": "k1"
-								}
-							],
-							"_key": "k0"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "If you only walk one stretch of Sydney's coast, make it this one. The path leaves the south end of Bondi Beach beside the Icebergs pool and keeps to the cliff edge, dropping into a beach or a cove every kilometre or so before it climbs out again.",
-									"_key": "k3"
-								}
-							],
-							"_key": "k2"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The route",
-									"_key": "k5"
-								}
-							],
-							"_key": "k4"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "From Bondi the path rounds Mackenzies Point to Tamarama, a small, steep beach known for strong rips. Bronte comes next, with its park, its rock baths and a line of cafés behind the sand. Past Bronte the path runs beside Waverley Cemetery, high above the water, before it comes down to Clovelly, a long narrow inlet that is calm on most days.",
-									"_key": "k7"
-								}
-							],
-							"_key": "k6"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "After Clovelly the path goes around Gordons Bay, where the water is clear enough for snorkelling on a flat day, and then along the last headland into Coogee. The walk is short, but the stairs add up: count on climbing out of every beach.",
-									"_key": "k9"
-								}
-							],
-							"_key": "k8"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Where to swim",
-									"_key": "k11"
-								}
-							],
-							"_key": "k10"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "There are ocean pools along the way and a beach at each end. Bondi Icebergs at the start charges entry; Bronte's rock baths are free. Swim between the flags on the beaches, and treat the pools as closed when waves are washing over their walls.",
-									"_key": "k13"
-								}
-							],
-							"_key": "k12"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The way back",
-									"_key": "k15"
-								}
-							],
-							"_key": "k14"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Buses run from Coogee back towards Bondi Junction and the city. Check the stop and the timetable before you set off, because the walk takes longer than it looks once you stop to swim.",
-									"_key": "k17"
-								}
-							],
-							"_key": "k16"
-						},
-						{
-							"_type": "block",
-							"style": "blockquote",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Start early, swim at the end, and the bus home feels like a reward.",
-									"_key": "k19"
-								}
-							],
-							"_key": "k18"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Last walked this spring: the Tamarama stairs were open, and Bronte pool was drained for cleaning.",
-									"_key": "k21"
-								}
-							],
-							"_key": "k20"
-						}
-					]
-				},
-				"bylines": [
-					{
-						"byline": "byline-saltwater"
-					}
-				],
-				"taxonomies": {
-					"category": [
-						"walks"
-					],
-					"tag": [
-						"eastern-beaches",
-						"ocean-pools",
-						"stairs",
-						"bus-back"
 					]
 				}
 			},
@@ -716,138 +429,47 @@
 				"status": "published",
 				"data": {
 					"title": "Spit to Manly",
-					"excerpt": "Ten kilometres of harbour bush, small beaches and sandstone headlands, from the Spit Bridge to the Manly ferry.",
-					"featured_image": {
-						"$media": {
-							"url": "https://images.unsplash.com/photo-1572811224088-af9bd40898af?w=1600&q=80&fm=jpg&fit=max",
-							"alt": "Sandstone cliffs at North Head, Manly",
-							"filename": "spit-to-manly.jpg"
+					"region": "Northern beaches",
+					"grade": "Moderate",
+					"distance": "10 km",
+					"duration": "3–4 hours",
+					"photo": "https://images.unsplash.com/photo-1572811224088-af9bd40898af?w=1200&q=75&auto=format&fit=crop",
+					"photo_alt": "Sandstone cliffs at North Head, Manly",
+					"photo_credit": "Gary Runn",
+					"photo_credit_url": "https://unsplash.com/photos/sea-cliff-during-daytime-GKrux4c4Sbc",
+					"card_size": "small",
+					"order": 2,
+					"walk_status": "coming",
+					"coming_note": "This walk hasn't been walked for Saltwater yet. It comes after Bondi to Coogee, and its page fills in once it has been walked.",
+					"body": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "The Manly walk is coming: the harbour side of the headland, the beaches on the ocean side, and the ferry home at the end.",
+									"_key": "s1",
+									"marks": []
+								}
+							],
+							"_key": "p1"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "Until then this page has the route facts and nothing that a person has not yet checked: no timings of our own, no swim notes, no photos of the track.",
+									"_key": "s2",
+									"marks": []
+								}
+							],
+							"_key": "p2"
 						}
-					},
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "10 km · 3–4 hours · Moderate · Ferry back from Manly.",
-									"_key": "k1"
-								}
-							],
-							"_key": "k0"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "This is the harbour's long walk, and it feels much further from the city than it is. The track starts at the northern end of the Spit Bridge and follows the shore of Middle Harbour all the way to Manly Cove, mostly through bush, with sandy beaches and rock shelves in between.",
-									"_key": "k3"
-								}
-							],
-							"_key": "k2"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The route",
-									"_key": "k5"
-								}
-							],
-							"_key": "k4"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The first stretch runs past Clontarf, a family beach with a netted swimming area. The track then climbs onto the headlands, where there are rough sections over sandstone and roots, and stairs in both directions. Grotto Point has a small lighthouse and, nearby, Aboriginal rock engravings; stay on the boardwalk and leave them as you find them.",
-									"_key": "k7"
-								}
-							],
-							"_key": "k6"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "From Dobroyd Head you look across the harbour mouth to North Head, the cliffs in the photograph. The track then drops past Reef Beach, Forty Baskets and Fairlight, and the last kilometre into Manly is an easy path along the water.",
-									"_key": "k9"
-								}
-							],
-							"_key": "k8"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Where to swim",
-									"_key": "k11"
-								}
-							],
-							"_key": "k10"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Clontarf and Forty Baskets are both sheltered; Forty Baskets has a small tidal pool. The water at Manly Cove is calm, and the ocean beach is a short walk across the Corso if you want waves.",
-									"_key": "k13"
-								}
-							],
-							"_key": "k12"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The way back",
-									"_key": "k15"
-								}
-							],
-							"_key": "k14"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Ferries run from Manly Wharf to Circular Quay. Sit outside on the way back: the ride across the harbour is the walk seen from the water.",
-									"_key": "k17"
-								}
-							],
-							"_key": "k16"
-						}
-					]
-				},
-				"bylines": [
-					{
-						"byline": "byline-saltwater"
-					}
-				],
-				"taxonomies": {
-					"category": [
-						"walks"
-					],
-					"tag": [
-						"harbour",
-						"lighthouses",
-						"ferry-back"
 					]
 				}
 			},
@@ -857,137 +479,33 @@
 				"status": "published",
 				"data": {
 					"title": "South Head",
-					"excerpt": "A short loop from Watsons Bay to Hornby Lighthouse, the red and white tower at the harbour's southern gate.",
-					"featured_image": {
-						"$media": {
-							"url": "https://images.unsplash.com/photo-1623322909259-14306fa63303?w=1600&q=80&fm=jpg&fit=max",
-							"alt": "Hornby Lighthouse on South Head",
-							"filename": "south-head.jpg"
+					"region": "Eastern beaches",
+					"grade": "Easy",
+					"distance": "1.5 km loop",
+					"duration": "45 min",
+					"photo": "https://images.unsplash.com/photo-1623322909259-14306fa63303?w=1200&q=75&auto=format&fit=crop",
+					"photo_alt": "Hornby Lighthouse on South Head",
+					"photo_credit": "Steven Zhang",
+					"photo_credit_url": "https://unsplash.com/photos/a-red-and-white-lighthouse-sitting-on-top-of-a-cliff-next-to-the-ocean-vDBVSOp38yE",
+					"card_size": "small",
+					"order": 3,
+					"walk_status": "coming",
+					"coming_note": "This walk hasn't been walked for Saltwater yet. The lighthouse, the harbour and the walk back up are written up once it has been walked.",
+					"body": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "The short loop out to Hornby Lighthouse is coming: the walk in from Watsons Bay, the harbour on one side and the ocean on the other, and where to sit when you get there.",
+									"_key": "s1",
+									"marks": []
+								}
+							],
+							"_key": "p1"
 						}
-					},
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "1.5 km loop · 45 minutes · Easy.",
-									"_key": "k1"
-								}
-							],
-							"_key": "k0"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "South Head is the shortest walk here and one of the best for a first visit. The loop starts near Camp Cove, a few minutes' walk from the Watsons Bay ferry wharf, and follows a mostly flat track out to the point.",
-									"_key": "k3"
-								}
-							],
-							"_key": "k2"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The route",
-									"_key": "k5"
-								}
-							],
-							"_key": "k4"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The path passes Lady Bay and the old gun emplacements that once guarded the harbour, then reaches Hornby Lighthouse, painted in red and white stripes so ships could see it by day. From the point you look straight across to North Head, with the open ocean on one side and the harbour on the other.",
-									"_key": "k7"
-								}
-							],
-							"_key": "k6"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The track has had repairs; our new photos are from the walk after they were finished. Some sections are close to the cliff edge, so keep children close.",
-									"_key": "k9"
-								}
-							],
-							"_key": "k8"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Where to swim",
-									"_key": "k11"
-								}
-							],
-							"_key": "k10"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Camp Cove is a small, calm harbour beach at the start of the loop. Watsons Bay has a harbour pool and fish and chips by the water.",
-									"_key": "k13"
-								}
-							],
-							"_key": "k12"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The way back",
-									"_key": "k15"
-								}
-							],
-							"_key": "k14"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Ferries run from Watsons Bay to Circular Quay, and buses go back to the city.",
-									"_key": "k17"
-								}
-							],
-							"_key": "k16"
-						}
-					]
-				},
-				"bylines": [
-					{
-						"byline": "byline-saltwater"
-					}
-				],
-				"taxonomies": {
-					"category": [
-						"walks"
-					],
-					"tag": [
-						"harbour",
-						"lighthouses"
 					]
 				}
 			},
@@ -997,149 +515,50 @@
 				"status": "published",
 				"data": {
 					"title": "The Coast Track",
-					"excerpt": "Bundeena to Otford through the Royal National Park, past Wedding Cake Rock, seen from the track.",
-					"featured_image": {
-						"$media": {
-							"url": "https://images.unsplash.com/photo-1784513435638-7325d4caef42?w=1600&q=80&fm=jpg&fit=max",
-							"alt": "Wedding Cake Rock above the ocean in the Royal National Park",
-							"filename": "the-coast-track.jpg"
+					"region": "Royal National Park",
+					"grade": "Hard",
+					"grade_note": "two days",
+					"distance": "26 km",
+					"duration": "2 days",
+					"transport": "Booking needed",
+					"summary": "Bundeena to Otford through the Royal National Park, past Wedding Cake Rock, seen from the track.",
+					"photo": "https://images.unsplash.com/photo-1784513435638-7325d4caef42?w=1600&q=75&auto=format&fit=crop",
+					"photo_alt": "Wedding Cake Rock above the ocean in the Royal National Park",
+					"photo_credit": "Matt Str",
+					"photo_credit_url": "https://unsplash.com/photos/white-cliffs-towering-over-a-deep-blue-ocean-hf23qR1E3dw",
+					"card_size": "wide",
+					"order": 4,
+					"walk_status": "coming",
+					"coming_note": "This walk hasn't been walked for Saltwater yet. Two days on the track is the biggest one here, so it comes after the shorter walks have been checked.",
+					"body": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "Two days from Bundeena to Otford, and the walk that needs the most planning: the booking, the water, and where the night goes.",
+									"_key": "s1",
+									"marks": []
+								}
+							],
+							"_key": "p1"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "It is on the list, and it will be walked before anything about timings or camping goes up here.",
+									"_key": "s2",
+									"marks": []
+								}
+							],
+							"_key": "p2"
 						}
-					},
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "26 km · 2 days · Hard · Booking needed for the campground.",
-									"_key": "k1"
-								}
-							],
-							"_key": "k0"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The Coast Track runs the length of the Royal National Park, from Bundeena in the north to Otford in the south. It is the longest walk on this site, and the only one we split over two days.",
-									"_key": "k3"
-								}
-							],
-							"_key": "k2"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Day one",
-									"_key": "k5"
-								}
-							],
-							"_key": "k4"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "From Bundeena the track crosses open heath along the cliff tops. Wedding Cake Rock, the white sandstone ledge in the photograph, is fenced off because it is unstable: look at it from the track and do not climb the fence. The track then reaches Wattamolla, a lagoon and beach that make a good lunch stop, and continues past Eagle Rock and the falls at Curracurrong to Garie Beach.",
-									"_key": "k7"
-								}
-							],
-							"_key": "k6"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Day two",
-									"_key": "k9"
-								}
-							],
-							"_key": "k8"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "South of Garie the track passes the beaches of North and South Era and Burning Palms, then climbs into rainforest before the final stretch to Otford. The rock platforms along this section, including the Figure Eight Pools, are dangerous in any swell and can be cut off by the tide; we do not route the walk through them.",
-									"_key": "k11"
-								}
-							],
-							"_key": "k10"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Planning",
-									"_key": "k13"
-								}
-							],
-							"_key": "k12"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Camping in the park is booked through NSW National Parks, and the campground at North Era is the usual halfway stop. Carry all your water for the first day, a stove and a map. Check the park's alerts before you go, because sections of the track close after storms and in fire weather.",
-									"_key": "k15"
-								}
-							],
-							"_key": "k14"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Getting there and back",
-									"_key": "k17"
-								}
-							],
-							"_key": "k16"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Bundeena is reached by ferry from Cronulla. Otford has a train station on the South Coast line, a short and steep climb down from the end of the track.",
-									"_key": "k19"
-								}
-							],
-							"_key": "k18"
-						}
-					]
-				},
-				"bylines": [
-					{
-						"byline": "byline-saltwater"
-					}
-				],
-				"taxonomies": {
-					"category": [
-						"walks"
-					],
-					"tag": [
-						"royal-national-park",
-						"overnight"
 					]
 				}
 			},
@@ -1149,268 +568,395 @@
 				"status": "published",
 				"data": {
 					"title": "Bondi to Watsons Bay",
-					"excerpt": "North from Bondi along the cliff tops, past Diamond Bay, to fish and chips by the harbour.",
-					"featured_image": {
-						"$media": {
-							"url": "https://images.unsplash.com/photo-1553510102-c8aeb4db678f?w=1600&q=80&fm=jpg&fit=max",
-							"alt": "Turquoise water below the cliffs at Diamond Bay",
-							"filename": "bondi-to-watsons-bay.jpg"
-						}
-					},
-					"content": [
+					"region": "Eastern beaches",
+					"grade": "Easy",
+					"grade_note": "stairs",
+					"distance": "6.5 km",
+					"duration": "2.5 hours",
+					"transport": "Ferry back",
+					"summary": "North from Bondi along the cliff tops, past Diamond Bay, to fish and chips by the harbour.",
+					"photo": "https://images.unsplash.com/photo-1553510102-c8aeb4db678f?w=1600&q=75&auto=format&fit=crop",
+					"photo_alt": "Turquoise water below the cliffs at Diamond Bay",
+					"photo_credit": "Jack Bass",
+					"photo_credit_url": "https://unsplash.com/photos/blue-body-of-water-near-cliff-YPZPUwJIwak",
+					"card_size": "wide",
+					"order": 5,
+					"walk_status": "coming",
+					"coming_note": "This walk hasn't been walked for Saltwater yet. The ferry home, the harbour and Diamond Bay are written up once it has been walked.",
+					"body": [
 						{
 							"_type": "block",
 							"style": "normal",
+							"markDefs": [],
 							"children": [
 								{
 									"_type": "span",
-									"text": "6.5 km · 2.5 hours · Easy, with stairs · Ferry back from Watsons Bay.",
-									"_key": "k1"
+									"text": "The other direction from Bondi: north along the cliff tops, past Diamond Bay, and down to the harbour for fish and chips and the ferry home.",
+									"_key": "s1",
+									"marks": []
 								}
 							],
-							"_key": "k0"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "This is the quieter half of the eastern beaches walk. It leaves the north end of Bondi Beach and follows the cliffs north to the harbour, ending at Watsons Bay instead of another beach.",
-									"_key": "k3"
-								}
-							],
-							"_key": "k2"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The route",
-									"_key": "k5"
-								}
-							],
-							"_key": "k4"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "From North Bondi the path climbs over Ben Buckler and through the streets and reserves of Dover Heights, where some stretches are footpath rather than track. At Diamond Bay a walkway runs along the cliff top above deep, clear water. Further on, the path passes Macquarie Lighthouse and then follows the cliffs of The Gap down into Watsons Bay.",
-									"_key": "k7"
-								}
-							],
-							"_key": "k6"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Shade",
-									"_key": "k9"
-								}
-							],
-							"_key": "k8"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "There is almost none. The cliff tops are open to the sun and the wind, and the only cover is in the reserves between them. Start early on a warm day and carry two litres of water.",
-									"_key": "k11"
-								}
-							],
-							"_key": "k10"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Where to swim",
-									"_key": "k13"
-								}
-							],
-							"_key": "k12"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Swim at Bondi before you start or at the harbour end: Watsons Bay has a netted harbour pool, and Camp Cove is a short walk away. The cliffs in between have no safe way down to the water.",
-									"_key": "k15"
-								}
-							],
-							"_key": "k14"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The way back",
-									"_key": "k17"
-								}
-							],
-							"_key": "k16"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Ferries run from Watsons Bay to Circular Quay; check the times before you set off, as they are less frequent in the evening. Buses also run back to the city.",
-									"_key": "k19"
-								}
-							],
-							"_key": "k18"
+							"_key": "p1"
 						}
 					]
-				},
-				"bylines": [
-					{
-						"byline": "byline-saltwater"
-					}
-				],
-				"taxonomies": {
-					"category": [
-						"walks"
-					],
-					"tag": [
-						"eastern-beaches",
-						"harbour",
-						"lighthouses",
-						"stairs",
-						"ferry-back"
+				}
+			}
+		],
+		"walk_stops": [
+			{ "id": "stop-bondi-1", "data": { "title": "Bondi Icebergs", "walk": "bondi-to-coogee", "order": 1 } },
+			{ "id": "stop-bondi-2", "data": { "title": "Mackenzies Point", "walk": "bondi-to-coogee", "order": 2 } },
+			{ "id": "stop-bondi-3", "data": { "title": "Tamarama", "walk": "bondi-to-coogee", "order": 3 } },
+			{ "id": "stop-bondi-4", "data": { "title": "Bronte pool", "walk": "bondi-to-coogee", "order": 4 } },
+			{ "id": "stop-bondi-5", "data": { "title": "Clovelly", "walk": "bondi-to-coogee", "order": 5 } },
+			{ "id": "stop-bondi-6", "data": { "title": "Gordons Bay", "walk": "bondi-to-coogee", "order": 6 } },
+			{ "id": "stop-bondi-7", "data": { "title": "Coogee Beach", "walk": "bondi-to-coogee", "order": 7 } },
+			{ "id": "stop-watsons-1", "data": { "title": "Bondi Beach", "walk": "bondi-to-watsons-bay", "order": 1 } },
+			{ "id": "stop-watsons-2", "data": { "title": "Diamond Bay", "walk": "bondi-to-watsons-bay", "order": 2 } },
+			{ "id": "stop-watsons-3", "data": { "title": "Watsons Bay", "walk": "bondi-to-watsons-bay", "order": 3 } }
+		],
+		"story_stops": [
+			{
+				"id": "story-bondi-1",
+				"data": {
+					"title": "Bondi, at first light",
+					"walk": "bondi-to-coogee",
+					"order": 1,
+					"text": "The beach before the crowds. The walk starts here, at the Icebergs pool, and climbs the stairs at the south end.",
+					"photo": "https://images.unsplash.com/photo-1556672737-95f72ea2fee8?w=2400&q=75&auto=format&fit=crop",
+					"photo_alt": "A surfer walking along Bondi Beach",
+					"photo_credit": "Colton Jones",
+					"photo_credit_url": "https://unsplash.com/photos/person-with-surf-board-walking-beside-seashore-Uy-sl6JCy6g"
+				}
+			},
+			{
+				"id": "story-bondi-2",
+				"data": {
+					"title": "The Icebergs pool",
+					"walk": "bondi-to-coogee",
+					"order": 2,
+					"text": "When the swell is up, the waves break straight into the lanes. It is the first thing you pass on the way out of Bondi.",
+					"photo": "https://images.unsplash.com/photo-1584868138762-fcae9e7d55b2?w=2400&q=75&auto=format&fit=crop",
+					"photo_alt": "Bondi Icebergs pool from above",
+					"photo_credit": "Kelvin Li",
+					"photo_credit_url": "https://unsplash.com/photos/blue-and-brown-swimming-pool-beside-blue-and-white-ocean-water-during-daytime-eBQ7Uzux3qk"
+				}
+			},
+			{
+				"id": "story-bondi-3",
+				"data": {
+					"title": "Coogee, at the end",
+					"walk": "bondi-to-coogee",
+					"order": 3,
+					"text": "Six kilometres and a lot of stairs from Bondi. The water at Coogee is the reward, and the buses leave from the beach.",
+					"photo": "https://images.unsplash.com/photo-1718750689942-9f51d49cfcea?w=2400&q=75&auto=format&fit=crop",
+					"photo_alt": "Coogee Beach and its turquoise water",
+					"photo_credit": "Dominic Kurniawan Suryaputra",
+					"photo_credit_url": "https://unsplash.com/photos/a-view-of-a-beach-with-a-city-in-the-background-styDbdRnb1U"
+				}
+			}
+		],
+		"log_entries": [
+			{
+				"id": "log-1",
+				"data": {
+					"when": "Coming first",
+					"text": "Bondi to Coogee comes first: its route, its stairs and the buses back are written up, and the walk itself follows.",
+					"order": 1
+				}
+			},
+			{
+				"id": "log-2",
+				"data": {
+					"when": "Next",
+					"text": "Then Spit to Manly and South Head, with a note on the tide and the swell at the top of each one.",
+					"order": 2
+				}
+			},
+			{
+				"id": "log-3",
+				"data": {
+					"when": "After that",
+					"text": "The Coast Track and Bondi to Watsons Bay, once the shorter walks have been walked and checked.",
+					"order": 3
+				}
+			}
+		],
+		"counters": [
+			{ "id": "counter-1", "data": { "value": "5", "label": "Walks planned", "order": 1 } },
+			{ "id": "counter-2", "data": { "value": "50 km", "label": "Still to walk", "order": 2 } },
+			{ "id": "counter-3", "data": { "value": "12", "label": "Ocean pools", "order": 3 } },
+			{ "id": "counter-4", "data": { "value": "0", "label": "Walked so far", "order": 4 } }
+		],
+		"safety_notes": [
+			{
+				"id": "safety-1",
+				"data": {
+					"title": "The swell",
+					"text": "Over two metres, rock pools and low ledges close. Each walk says so at the top once we have walked it.",
+					"order": 1
+				}
+			},
+			{
+				"id": "safety-2",
+				"data": {
+					"title": "The heat",
+					"text": "Most of these walks have no shade. Go early, carry two litres.",
+					"order": 2
+				}
+			},
+			{
+				"id": "safety-3",
+				"data": {
+					"title": "The way back",
+					"text": "Every walk ends at a bus stop or a ferry wharf, and we name it.",
+					"order": 3
+				}
+			},
+			{
+				"id": "safety-4",
+				"data": {
+					"title": "Updated",
+					"text": "Each walk shows the date it was last walked, and says plainly when it hasn't been walked yet.",
+					"order": 4
+				}
+			}
+		],
+		"home": [
+			{
+				"id": "home-page",
+				"status": "published",
+				"data": {
+					"title": "Home",
+					"hero_line_1": "Walk the",
+					"hero_line_2": "edge of",
+					"hero_highlight": "Sydney",
+					"hero_intro": "Coastal walks from Bondi to the Royal National Park, walked and written up with where to swim at the end. Bondi to Coogee is the first to be walked.",
+					"hero_cta_label": "Start with Bondi to Coogee",
+					"hero_cta_href": "/walks/bondi-to-coogee",
+					"hero_cta2_label": "See every walk",
+					"hero_cta2_href": "/walks",
+					"clip_url": "https://videos.pexels.com/video-files/20512871/20512871-sd_960_540_30fps.mp4",
+					"clip_poster": "https://images.pexels.com/videos/20512871/pexels-photo-20512871.jpeg?auto=compress&cs=tinysrgb&w=1600",
+					"clip_alt": "Waves breaking over the Icebergs pool at Bondi",
+					"clip_credit": "Edan Kwon",
+					"clip_credit_url": "https://www.pexels.com/video/a-pool-with-waves-crashing-on-the-shore-20512871/",
+					"walks_eyebrow": "Five walks to start with",
+					"walks_heading_1": "Cliffs, pools",
+					"walks_heading_2": "and lighthouses",
+					"walks_note": "Every walk here is still coming: none has been walked for Saltwater yet, so each card says so until its write-up is checked.",
+					"log_heading": "The field log",
+					"quote": "“Start early, swim at the end, and the bus home feels like a reward.”",
+					"quote_attribution": "The plan for Bondi to Coogee",
+					"quote_photo": "https://images.unsplash.com/photo-1584868138762-fcae9e7d55b2?w=1600&q=75&auto=format&fit=crop",
+					"quote_photo_alt": "Bondi Icebergs pool from above, waves breaking over its wall",
+					"quote_credit": "Kelvin Li",
+					"quote_credit_url": "https://unsplash.com/photos/blue-and-brown-swimming-pool-beside-blue-and-white-ocean-water-during-daytime-eBQ7Uzux3qk",
+					"band_heading_1": "Before you",
+					"band_heading_2": "head out",
+					"footer_made": "Made by the Pinies in Piny, on EmDash.",
+					"footer_line": "Walks are written up by the person who walked them."
+				}
+			}
+		],
+		"pages": [
+			{
+				"id": "page-about",
+				"slug": "about",
+				"status": "published",
+				"data": {
+					"title": "About Saltwater",
+					"intro": "Sydney's coastal walks, walked by a person, timed with a watch, and written up with where to swim at the end.",
+					"body": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "Saltwater is a small set of walks along the Sydney coast: from Bondi to Coogee, north to Watsons Bay, over to Manly, out to South Head and down into the Royal National Park.",
+									"_key": "a1",
+									"marks": []
+								}
+							],
+							"_key": "ab1"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "What is here now",
+									"_key": "a2",
+									"marks": []
+								}
+							],
+							"_key": "ab2"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "The routes and the photographs are up. None of the walks has been walked for Saltwater yet, so every one is marked as coming, and the date each was last checked will appear when there is one.",
+									"_key": "a3",
+									"marks": []
+								}
+							],
+							"_key": "ab3"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "The photographs",
+									"_key": "a4",
+									"marks": []
+								}
+							],
+							"_key": "ab4"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "The photographs are linked from Unsplash and the coast clip from Pexels, each with its photographer named on the page where it appears and all of them listed in the footer. Nothing is copied into this site.",
+									"_key": "a5",
+									"marks": []
+								}
+							],
+							"_key": "ab5"
+						}
 					]
 				}
 			},
 			{
-				"id": "log-spring",
-				"slug": "field-log-spring",
+				"id": "page-tides-and-safety",
+				"slug": "tides-and-safety",
 				"status": "published",
 				"data": {
-					"title": "Field log: spring",
-					"excerpt": "Bondi to Coogee walked again, ferry times back from Watsons Bay, and new photos of South Head.",
-					"featured_image": {
-						"$media": {
-							"url": "https://images.unsplash.com/photo-1584868138762-fcae9e7d55b2?w=1600&q=80&fm=jpg&fit=max",
-							"alt": "Bondi Icebergs pool from above, waves breaking over its wall",
-							"filename": "field-log-spring.jpg"
-						}
-					},
-					"content": [
+					"title": "Tides & safety",
+					"intro": "A few things that hold for every walk on this coast, whatever the forecast says.",
+					"body": [
 						{
 							"_type": "block",
-							"style": "normal",
+							"style": "h2",
+							"markDefs": [],
 							"children": [
 								{
 									"_type": "span",
-									"text": "Each walk on this site shows when we last walked it and what had changed. This log collects those changes in one place.",
-									"_key": "k1"
+									"text": "The swell",
+									"_key": "t1",
+									"marks": []
 								}
 							],
-							"_key": "k0"
+							"_key": "tb1"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "Over about two metres, the rock platforms and low ledges on these walks are not worth it. Check the swell before you go, and check it again at the beach.",
+									"_key": "t2",
+									"marks": []
+								}
+							],
+							"_key": "tb2"
 						},
 						{
 							"_type": "block",
 							"style": "h2",
+							"markDefs": [],
 							"children": [
 								{
 									"_type": "span",
-									"text": "This week",
-									"_key": "k3"
+									"text": "The sun",
+									"_key": "t3",
+									"marks": []
 								}
 							],
-							"_key": "k2"
+							"_key": "tb3"
 						},
 						{
 							"_type": "block",
 							"style": "normal",
+							"markDefs": [],
 							"children": [
 								{
 									"_type": "span",
-									"text": "Walked Bondi to Coogee again: the Tamarama stairs are open, Bronte pool was drained for cleaning.",
-									"_key": "k5"
+									"text": "Most of these walks have very little shade. Start early, carry two litres of water, and turn around rather than push on in the heat of the day.",
+									"_key": "t4",
+									"marks": []
 								}
 							],
-							"_key": "k4"
+							"_key": "tb4"
 						},
 						{
 							"_type": "block",
 							"style": "h2",
+							"markDefs": [],
 							"children": [
 								{
 									"_type": "span",
-									"text": "Last week",
-									"_key": "k7"
+									"text": "Swimming",
+									"_key": "t5",
+									"marks": []
 								}
 							],
-							"_key": "k6"
+							"_key": "tb5"
 						},
 						{
 							"_type": "block",
 							"style": "normal",
+							"markDefs": [],
 							"children": [
 								{
 									"_type": "span",
-									"text": "Added the ferry times back from Watsons Bay, and a note on shade.",
-									"_key": "k9"
+									"text": "Swim between the flags at patrolled beaches, and never alone in a rock pool when the swell is running. The ocean pools on these walks are wonderful and, in a big sea, dangerous.",
+									"_key": "t6",
+									"marks": []
 								}
 							],
-							"_key": "k8"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Spring",
-									"_key": "k11"
-								}
-							],
-							"_key": "k10"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "New photos of South Head after the track repairs.",
-									"_key": "k13"
-								}
-							],
-							"_key": "k12"
+							"_key": "tb6"
 						}
 					]
-				},
-				"bylines": [
-					{
-						"byline": "byline-saltwater"
-					}
-				],
-				"taxonomies": {
-					"category": [
-						"field-log"
-					],
-					"tag": [
-						"eastern-beaches",
-						"harbour"
+				}
+			},
+			{
+				"id": "page-map",
+				"slug": "map",
+				"status": "published",
+				"data": {
+					"title": "Map",
+					"intro": "Where every walk starts, where it ends, and how far apart they are.",
+					"body": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"text": "The map is still being drawn. Until it is here, each walk page has its route as a sketch and a list of the places it passes, and the walks page lists all five with their distance and grade.",
+									"_key": "m1",
+									"marks": []
+								}
+							],
+							"_key": "mb1"
+						}
 					]
 				}
 			}
