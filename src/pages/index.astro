@@ -27,7 +27,9 @@ const [home, walks, log, safety, counters] = await Promise.all([
 
 <Site title="Saltwater" description={home?.heroIntro} variant="hero">
 	<main id="main">
-		<section class="hero">
+		<section
+			class="on-dark shade-hero relative isolate flex h-hero min-h-hero-min items-end overflow-hidden text-white max-md:h-hero-sm max-md:min-h-0"
+		>
 			{home?.clipUrl && (
 				<CoastClip
 					src={home.clipUrl}
@@ -36,20 +38,22 @@ const [home, walks, log, safety, counters] = await Promise.all([
 				/>
 			)}
 
-			<div class="wrap hero__inner lift">
-				<h1>
-					<span class="line"><span style="--i:0">{home?.heroLine1}</span></span>
-					<span class="line"
-						><span style="--i:1"
-							>{home?.heroLine2} <em>{home?.heroHighlight}</em></span
+			<div class="wrap lift w-full pb-33 max-md:pb-27.5">
+				<h1 class="text-hero leading-hero max-md:text-hero-sm">
+					<span class="tide-line"><span class="tide" style="--i:0">{home?.heroLine1}</span></span>
+					<span class="tide-line"
+						><span class="tide" style="--i:1"
+							>{home?.heroLine2} <em class="text-secondary-400 not-italic">{home?.heroHighlight}</em></span
 						></span
 					>
 				</h1>
 				{home?.heroIntro && (
-					<p class="hero__intro rise" style="--i:2">{home.heroIntro}</p>
+					<p class="rise mt-5.5 mb-7 max-w-hero-intro font-serif text-intro leading-snug max-md:text-lead" style="--i:2">
+						{home.heroIntro}
+					</p>
 				)}
 				{home?.ctaLabel && (
-					<p class="hero__actions rise" style="--i:3">
+					<p class="rise flex flex-wrap gap-3.5" style="--i:3">
 						<a class="button" href={home.ctaHref || "/walks"}>{home.ctaLabel}</a>
 						{home.cta2Label && (
 							<a class="button button--ghost" href={home.cta2Href || "/walks"}>
@@ -63,42 +67,50 @@ const [home, walks, log, safety, counters] = await Promise.all([
 			<RouteEdge />
 
 			{home?.clipCredit && (
-				<p class="hero__credit">
-					Video: <a href={home.clipCreditUrl}>{home.clipCredit}</a>, Pexels
+				<p class="absolute top-24 right-10 z-2 text-credit opacity-85 max-md:top-26 max-md:right-4.5">
+					Video: <a class="underline underline-offset-3" href={home.clipCreditUrl}>{home.clipCredit}</a>, Pexels
 				</p>
 			)}
 		</section>
 
-		<section class="walks" aria-labelledby="walks-heading">
+		<section class="pt-24 pb-18 max-md:pt-16 max-md:pb-12" aria-labelledby="walks-heading">
 			<div class="wrap">
 				{home?.walksEyebrow && <p class="eyebrow reveal">{home.walksEyebrow}</p>}
-				<h2 id="walks-heading" class="reveal">
+				<h2 id="walks-heading" class="reveal mt-2.5 mb-4.5 text-display-xl max-md:text-display-sm">
 					{home?.walksHeading1}<br />{home?.walksHeading2}
 				</h2>
-				{home?.walksNote && <p class="walks__note reveal">{home.walksNote}</p>}
+				{home?.walksNote && (
+					<p class="reveal mb-8.5 max-w-note font-serif text-note leading-comfy text-neutral-600 dark:text-neutral-300">
+						{home.walksNote}
+					</p>
+				)}
 
-				<div class="mosaic">
+				<div class="grid grid-cols-mosaic gap-5.5 max-md:grid-cols-stack max-md:gap-4.5">
 					{walks.map((walk) => <WalkCard walk={walk} />)}
 				</div>
 			</div>
 		</section>
 
-		<section class="log" aria-labelledby="log-heading">
-			<div class="wrap log__inner">
-				<div class="counts reveal">
+		<section class="pb-22 max-md:pb-14" aria-labelledby="log-heading">
+			<div class="wrap grid grid-cols-log items-start gap-14 max-md:grid-cols-stack max-md:gap-7">
+				<div class="reveal grid grid-cols-pair gap-3.5">
 					{counters.map((counter) => (
-						<div>
-							<b>{counter.value}</b>
-							<span>{counter.label}</span>
+						<div class="rounded-card bg-primary-700 p-5.5 text-white dark:bg-primary-800">
+							<b class="block font-display font-condensed text-display leading-display font-extrabold text-secondary-400 max-md:text-display-xs">
+								{counter.value}
+							</b>
+							<span class="text-label font-semibold tracking-widest uppercase">{counter.label}</span>
 						</div>
 					))}
 				</div>
 				<div class="reveal-side">
-					<h2 id="log-heading">{home?.logHeading}</h2>
-					<ol>
+					<h2 id="log-heading" class="mb-4.5 text-title-lg">{home?.logHeading}</h2>
+					<ol class="border-t-2 border-neutral-800 dark:border-neutral-50">
 						{log.map((entry) => (
-							<li>
-								<span class="log__when">{entry.when}</span>
+							<li class="grid grid-cols-log-entry gap-4.5 border-b border-tertiary-200 py-3.5 font-serif text-lead leading-snug max-md:grid-cols-log-entry-sm max-md:text-body dark:border-neutral-700">
+								<span class="font-display font-condensed text-quote leading-tight font-extrabold text-primary-700 uppercase dark:text-primary-400">
+									{entry.when}
+								</span>
 								<span>{entry.text}</span>
 							</li>
 						))}
@@ -107,15 +119,15 @@ const [home, walks, log, safety, counters] = await Promise.all([
 			</div>
 		</section>
 
-		<section class="band" aria-labelledby="band-heading">
-			<div class="wrap band__inner">
-				<h2 id="band-heading" class="reveal-side">
+		<section class="bg-secondary-400 text-neutral-800" aria-labelledby="band-heading">
+			<div class="wrap grid grid-cols-band items-center gap-12 py-18 max-md:grid-cols-stack max-md:gap-6.5 max-md:py-13">
+				<h2 id="band-heading" class="reveal-side text-display-lg max-md:text-display-sm">
 					{home?.bandHeading1}<br />{home?.bandHeading2}
 				</h2>
-				<ul>
+				<ul class="grid grid-cols-pair gap-x-7 gap-y-4.5 font-serif text-lead leading-cozy max-md:grid-cols-stack">
 					{safety.map((note) => (
 						<li class="reveal">
-							<b>{note.title}</b>
+							<b class="mb-0.5 block font-sans text-nav tracking-widest uppercase">{note.title}</b>
 							{note.text}
 						</li>
 					))}
@@ -124,24 +136,27 @@ const [home, walks, log, safety, counters] = await Promise.all([
 		</section>
 
 		{home?.quote && (
-			<section class="strip" aria-label="A note from the walk">
+			<section
+				class="relative isolate grid h-strip place-items-center overflow-hidden text-center text-white max-md:h-strip-sm after:absolute after:inset-0 after:-z-1 after:bg-primary-950/35"
+				aria-label="A note from the walk"
+			>
 				{home.quotePhoto && (
 					<img
-						class="zoom-in"
+						class="zoom-in absolute inset-0 -z-2 size-full object-cover"
 						src={home.quotePhoto}
 						alt={home.quotePhotoAlt}
 						loading="lazy"
 						decoding="async"
 					/>
 				)}
-				<blockquote class="reveal">
+				<blockquote class="reveal max-w-quote px-6 font-serif text-display-md leading-tight italic max-md:text-title-sm">
 					{home.quote}
-					<small>
+					<small class="mt-4.5 block font-sans text-nav not-italic opacity-90">
 						{home.quoteAttribution}
 						{home.quoteCredit && (
 							<>
 								{" · Photo: "}
-								<a href={home.quoteCreditUrl}>{home.quoteCredit}</a>
+								<a class="underline underline-offset-3" href={home.quoteCreditUrl}>{home.quoteCredit}</a>
 							</>
 						)}
 					</small>

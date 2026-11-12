@@ -1,13 +1,14 @@
 {
   "name": "Saltwater",
-  "line": "Sydney's coastal walks, walked, timed and written up: a photo-led EmDash blog with comments.",
+  "line": "Sydney's coastal walks, walked, timed and written up: a photo-led EmDash site, made by the Pinies.",
   "kind": "emdash",
   "category": "blog",
   "stacks": [
     "astro",
-    "emdash"
+    "emdash",
+    "tailwindcss"
   ],
-  "status": "preview",
+  "status": "built",
   "demo": null,
   "preview": null,
   "licence": "MIT",

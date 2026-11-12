@@ -7,26 +7,26 @@
  */
 ---
 
-<div class="route-edge" aria-hidden="true">
-	<svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+<div class="pointer-events-none absolute inset-x-0 bottom-0 h-route" aria-hidden="true">
+	<svg class="size-full" viewBox="0 0 1440 120" preserveAspectRatio="none">
 		<path
-			class="route-edge__path"
+			class="route-path"
 			d="M40 92 C 220 40, 360 108, 520 70 S 820 30, 980 76 S 1260 104, 1400 58"
 			fill="none"
 			stroke="#ffcf4d"
 			stroke-width="4"
 			stroke-linecap="round"></path>
 	</svg>
-	<svg viewBox="0 0 1440 120" preserveAspectRatio="none">
-		<g class="route-edge__stop"><circle cx="40" cy="92" r="7" fill="#ffcf4d"></circle></g>
-		<g class="route-edge__stop"><circle cx="520" cy="70" r="6" fill="#ffcf4d"></circle></g>
-		<g class="route-edge__stop"><circle cx="980" cy="76" r="6" fill="#ffcf4d"></circle></g>
-		<g class="route-edge__stop"><circle cx="1400" cy="58" r="7" fill="#ffcf4d"></circle></g>
+	<svg class="size-full" viewBox="0 0 1440 120" preserveAspectRatio="none">
+		<g class="route-stop"><circle cx="40" cy="92" r="7" fill="#ffcf4d"></circle></g>
+		<g class="route-stop"><circle cx="520" cy="70" r="6" fill="#ffcf4d"></circle></g>
+		<g class="route-stop"><circle cx="980" cy="76" r="6" fill="#ffcf4d"></circle></g>
+		<g class="route-stop"><circle cx="1400" cy="58" r="7" fill="#ffcf4d"></circle></g>
 	</svg>
-	<div class="route-edge__labels">
-		<span style="left: 40px">Bondi</span>
-		<span style="left: 36%">Bronte</span>
-		<span style="left: 68%">Clovelly</span>
-		<span style="right: 40px">Coogee</span>
+	<div class="route-labels font-sans text-caption leading-normal font-semibold text-white text-shadow-label">
+		<span class="absolute bottom-2" style="left: 40px">Bondi</span>
+		<span class="absolute bottom-2 max-md:hidden" style="left: 36%">Bronte</span>
+		<span class="absolute bottom-2 max-md:hidden" style="left: 68%">Clovelly</span>
+		<span class="absolute bottom-2" style="right: 40px">Coogee</span>
 	</div>
 </div>

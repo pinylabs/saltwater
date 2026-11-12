@@ -21,22 +21,56 @@ const atSafety = path === "/tides-and-safety";
 const atAbout = path === "/about";
 
 const current = (active: boolean) => (active ? "page" : undefined);
+
+const links = [
+	{ href: "/walks", label: "Walks", active: atWalks },
+	{ href: "/map", label: "Map", active: atMap },
+	{ href: "/tides-and-safety", label: "Tides & safety", active: atSafety },
+	{ href: "/about", label: "About", active: atAbout },
+];
 ---
 
-<header class:list={["site-header", variant === "hero" && "site-header--hero", variant === "solid" && "site-header--solid"]}>
-	<div class="wrap site-header__inner">
-		<a class="mark" href="/" aria-label={`${siteName}, home`}>
-			<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
+<header
+	class:list={[
+		"z-5",
+		variant === "hero" && "on-dark absolute inset-x-0 top-0 text-white",
+		variant === "solid" &&
+			"static border-b border-tertiary-200 bg-tertiary-100 text-neutral-800 dark:border-neutral-700 dark:bg-neutral-950 dark:text-neutral-50",
+	]}
+>
+	<div
+		class:list={[
+			"wrap flex items-center gap-7.5 max-md:grid max-md:h-auto max-md:grid-cols-header max-md:gap-x-3 max-md:gap-y-1 max-md:pt-2.5 max-md:pb-2",
+			variant === "solid" ? "h-header-solid" : "h-header",
+		]}
+	>
+		<a
+			class="me-auto inline-flex items-center gap-2.5 font-display font-condensed text-logo font-extrabold tracking-wide uppercase max-md:col-start-1 max-md:row-start-1 max-md:me-0 max-md:text-intro"
+			href="/"
+			aria-label={`${siteName}, home`}
+		>
+			<svg class="size-7.5 shrink-0" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
 				<path d="M3 12c4-4 8-4 12 0s8 4 14 0M3 21c4-4 8-4 12 0s8 4 14 0"></path>
 			</svg>
 			{siteName}
 		</a>
-		<nav class="site-nav" aria-label="Main">
-			<a class="site-nav__link" href="/walks" aria-current={current(atWalks)}>Walks</a>
-			<a class="site-nav__link" href="/map" aria-current={current(atMap)}>Map</a>
-			<a class="site-nav__link" href="/tides-and-safety" aria-current={current(atSafety)}>Tides &amp; safety</a>
-			<a class="site-nav__link" href="/about" aria-current={current(atAbout)}>About</a>
+		<nav
+			class="flex items-center gap-7.5 text-nav font-semibold max-md:col-span-2 max-md:col-start-1 max-md:row-start-2 max-md:gap-3.5 max-md:text-caption"
+			aria-label="Main"
+		>
+			{links.map((link) => (
+				<a
+					class="relative py-1.5 current:underline current:decoration-2 current:underline-offset-6 max-md:py-0.5"
+					href={link.href}
+					aria-current={current(link.active)}
+				>
+					{link.label}
+				</a>
+			))}
 		</nav>
-		<a class="site-nav__cta" href="/walks">This weekend</a>
+		<a
+			class="nav-cta rounded-pill bg-secondary-400 px-4.5 py-2.5 text-nav font-semibold whitespace-nowrap text-neutral-800 max-md:col-start-2 max-md:row-start-1 max-md:px-3.5 max-md:py-2 max-md:text-label"
+			href="/walks">This weekend</a
+		>
 	</div>
 </header>

@@ -15,24 +15,36 @@ const [walks, home] = await Promise.all([getWalks(), getHome()]);
 	variant="solid"
 >
 	<main id="main">
-		<section class="page-hero">
+		<section class="border-b border-tertiary-200 pt-14 pb-8.5 dark:border-neutral-700">
 			<div class="wrap">
-				{home?.walksEyebrow && <p class="eyebrow">{home.walksEyebrow}</p>}
-				<h1>Every walk</h1>
-				{home?.walksNote && <p>{home.walksNote}</p>}
+				{home?.walksEyebrow && (
+					<p class="eyebrow mt-4.5 max-w-lede font-serif text-quote leading-cozy text-neutral-600 dark:text-neutral-300">
+						{home.walksEyebrow}
+					</p>
+				)}
+				<h1 class="text-page-title">Every walk</h1>
+				{home?.walksNote && (
+					<p class="mt-4.5 max-w-lede font-serif text-quote leading-cozy text-neutral-600 dark:text-neutral-300">
+						{home.walksNote}
+					</p>
+				)}
 			</div>
 		</section>
 
 		<div class="wrap">
-			<ul class="walk-list">
+			<ul class="grid gap-4.5 pt-2 pb-20 max-md:pb-14">
 				{walks.map((walk) => {
 					const coming = walk.status !== "walked";
 					const facts = [walk.grade, walk.distance, walk.duration].filter(Boolean);
 					return (
 						<li>
-							<a class="walk-row lift-card" href={`/walks/${walk.slug}`}>
-								<div class="walk-row__pic">
+							<a
+								class="lift-card grid grid-cols-row items-center gap-5.5 rounded-card bg-tertiary-50 p-4 shadow-card hover:shadow-lift max-lg:grid-cols-row-md max-md:grid-cols-stack dark:bg-neutral-900 dark:shadow-card-dark dark:hover:shadow-lift-dark"
+								href={`/walks/${walk.slug}`}
+							>
+								<div class="relative aspect-photo overflow-hidden rounded-thumb max-md:aspect-photo-wide">
 									<img
+										class="lift-photo absolute inset-0 size-full object-cover"
 										src={walk.photo}
 										alt={walk.photoAlt}
 										loading="lazy"
@@ -41,21 +53,25 @@ const [walks, home] = await Promise.all([getWalks(), getHome()]);
 									/>
 								</div>
 								<div>
-									<h2>{walk.title}</h2>
-									{walk.summary && <p class="walk-row__meta">{walk.summary}</p>}
+									<h2 class="text-row-title leading-heading">{walk.title}</h2>
+									{walk.summary && (
+										<p class="mt-2 font-serif text-body leading-comfy text-neutral-600 dark:text-neutral-300">{walk.summary}</p>
+									)}
 									{facts.length > 0 && (
-										<p class="walk-row__facts">
+										<p class="mt-2.5 flex flex-wrap gap-3.5 text-caption font-semibold text-primary-700 dark:text-primary-400">
 											{facts.map((fact) => <span>{fact}</span>)}
 										</p>
 									)}
-									<p class="walk-row__meta">
+									<p class="mt-2 font-serif text-body leading-comfy text-neutral-600 dark:text-neutral-300">
 										{coming ? "Coming: not walked yet" : "Walked"}
 										{walk.lastChecked
 											? ` · Last checked ${walk.lastChecked}`
 											: " · Last checked: no date yet"}
 									</p>
 								</div>
-								<span class="walk-row__go">Read the walk</span>
+								<span class="font-display font-condensed text-note font-extrabold whitespace-nowrap text-primary-700 uppercase max-lg:col-2 max-md:col-auto dark:text-primary-400">
+									Read the walk
+								</span>
 							</a>
 						</li>
 					);

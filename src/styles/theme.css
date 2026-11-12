@@ -1,0 +1,208 @@
+/* Saltwater's design tokens, the one file that sets the template's look. Every colour, face, size, radius, shadow and
+   measure the pages use is named here, and the markup reaches them only through Tailwind's utilities: change a value
+   here and every page follows. `static` keeps every token in the stylesheet, so a design panel can edit it live. */
+@theme static {
+  /* Tailwind's own palette, type scale and radii are replaced by Saltwater's, so nothing off-brand can slip in. */
+  --color-*: initial;
+  --font-*: initial;
+  --text-*: initial;
+  --leading-*: initial;
+  --tracking-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --container-*: initial;
+
+  --color-white: #fff;
+  --color-black: #000;
+
+  /* Primary: the sea. 700 is the light pages' sea blue (links, facts, eyebrows, the stats band), 400 the dark pages'
+     one; 800 the stats band after dark; 900 the deep blue of the footer and 950 the deepest, behind the photo story
+     and under the footer after dark. 100 is the footer's words. */
+  --color-primary: #0b4f6c;
+  --color-primary-50: #e9f6f8;
+  --color-primary-100: #cfe3ea;
+  --color-primary-200: #a3d3e5;
+  --color-primary-300: #78c4e1;
+  --color-primary-400: #4fb6dd;
+  --color-primary-500: #2a8fb8;
+  --color-primary-600: #146d92;
+  --color-primary-700: #0b4f6c;
+  --color-primary-800: #0e3a4f;
+  --color-primary-900: #082a3b;
+  --color-primary-950: #04121b;
+
+  /* Secondary: the sun yellow of the buttons, the badges, the band and the highlighted word (400). */
+  --color-secondary: #ffcf4d;
+  --color-secondary-50: #fff9e6;
+  --color-secondary-100: #fff1bf;
+  --color-secondary-200: #ffe594;
+  --color-secondary-300: #ffda6b;
+  --color-secondary-400: #ffcf4d;
+  --color-secondary-500: #f2b61f;
+  --color-secondary-600: #d1930b;
+  --color-secondary-700: #a46f0a;
+  --color-secondary-800: #7d540e;
+  --color-secondary-900: #5c3e0f;
+  --color-secondary-950: #352206;
+
+  /* Tertiary: sand. 100 is the light pages' ground, 50 a card on it, 200 the rule between things. */
+  --color-tertiary: #f3ead9;
+  --color-tertiary-50: #fffaf0;
+  --color-tertiary-100: #f3ead9;
+  --color-tertiary-200: #dccfb6;
+  --color-tertiary-300: #c7b48f;
+  --color-tertiary-400: #af9a70;
+  --color-tertiary-500: #958056;
+  --color-tertiary-600: #786545;
+  --color-tertiary-700: #5c4d36;
+  --color-tertiary-800: #423829;
+  --color-tertiary-900: #2c251b;
+  --color-tertiary-950: #1a160f;
+
+  /* Neutral: ink. Light pages use soft words 600 and ink 800 (also the words on sun yellow); dark pages mirror them
+     with ink 50, soft words 300, rule 700, card 900 and ground 950. */
+  --color-neutral: #0d2230;
+  --color-neutral-50: #e8f1f3;
+  --color-neutral-100: #d3e0e4;
+  --color-neutral-200: #b9cbd2;
+  --color-neutral-300: #9db2bc;
+  --color-neutral-400: #7d929c;
+  --color-neutral-500: #61757f;
+  --color-neutral-600: #4a5d68;
+  --color-neutral-700: #1d3a4a;
+  --color-neutral-800: #0d2230;
+  --color-neutral-900: #0c2230;
+  --color-neutral-950: #071823;
+
+  /* Faces, loaded from Google Fonts by the layout: Bricolage Grotesque condensed for headings, Newsreader for text,
+     Instrument Sans for labels and the interface. */
+  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-serif: "Newsreader", Georgia, serif;
+  --font-sans: "Instrument Sans", system-ui, sans-serif;
+
+  /* Type scale. A size sets no line height of its own: the text keeps the body's 1.6 unless a `leading-*` says
+     otherwise. */
+  --text-tag: 11px;
+  --text-credit: 12px;
+  --text-caption: 13px;
+  --text-label: 14px;
+  --text-nav: 15px;
+  --text-base: 16px;
+  --text-body: 17px;
+  --text-note: 18px;
+  --text-lead: 19px;
+  --text-read: 20px;
+  --text-article: 21px;
+  --text-quote: 22px;
+  --text-intro: 24px;
+  --text-title-xs: 26px;
+  --text-logo: 30px;
+  --text-title-sm: 32px;
+  --text-title: 34px;
+  --text-title-md: 40px;
+  --text-title-lg: 44px;
+  --text-display-xs: 48px;
+  --text-display-sm: 52px;
+  --text-display-md: 54px;
+  --text-display: 64px;
+  --text-display-lg: 72px;
+  --text-display-xl: 84px;
+  /* The home's headline, desktop and phone, and a walk's title over its photograph. */
+  --text-hero: 148px;
+  --text-hero-sm: 76px;
+  --text-walk: 132px;
+  --text-walk-sm: 68px;
+  /* Titles that follow the window: a plain page's, the 404's, a section in a page's text, a row in the walks list. */
+  --text-page-title: clamp(44px, 7vw, 92px);
+  --text-error-title: clamp(40px, 7vw, 88px);
+  --text-section-title: clamp(28px, 3.4vw, 38px);
+  --text-row-title: clamp(26px, 3vw, 36px);
+
+  --leading-normal: normal;
+  --leading-hero: 0.86;
+  --leading-display: 0.9;
+  --leading-heading: 0.95;
+  --leading-solid: 1;
+  --leading-tight: 1.1;
+  --leading-badge: 1.2;
+  --leading-snug: 1.4;
+  --leading-cozy: 1.45;
+  --leading-comfy: 1.5;
+  --leading-body: 1.6;
+  --leading-loose: 1.7;
+  --leading-list: 1.9;
+
+  --tracking-tight: -0.01em;
+  --tracking-wide: 0.02em;
+  --tracking-wider: 0.04em;
+  --tracking-widest: 0.06em;
+  --tracking-eyebrow: 0.08em;
+
+  /* Shapes: every button and badge is a pill; a card, a thumbnail, the checked box, and a focus ring's corner. */
+  --radius-pill: 999px;
+  --radius-card: 22px;
+  --radius-box: 16px;
+  --radius-thumb: 14px;
+  --radius-focus: 4px;
+
+  /* A card's shadow at rest and lifted, for light pages and dark; a photo story's panel. */
+  --shadow-card: 0 22px 50px -32px rgb(8 42 59 / 0.55);
+  --shadow-card-dark: 0 22px 50px -32px rgb(0 0 0 / 0.75);
+  --shadow-lift: 0 34px 70px -30px rgb(8 42 59 / 0.7);
+  --shadow-lift-dark: 0 34px 70px -30px rgb(0 0 0 / 0.85);
+  --shadow-panel: 0 30px 60px -30px rgb(0 0 0 / 0.6);
+
+  /* The labels under the hero's route, over the photograph. */
+  --text-shadow-label: 0 1px 6px rgb(0 0 0 / 0.5);
+
+  /* Spacing follows Tailwind's 4px step; these are the fixed sizes that are not a step of it. */
+  --spacing: 0.25rem;
+  --spacing-header: 84px;
+  --spacing-header-solid: 76px;
+  --spacing-hero: min(100vh, 860px);
+  --spacing-hero-min: 620px;
+  --spacing-hero-sm: 760px;
+  --spacing-walk-hero: 640px;
+  --spacing-walk-hero-sm: 520px;
+  --spacing-strip: 560px;
+  --spacing-strip-sm: 420px;
+  --spacing-route: 120px;
+  --spacing-pic: 210px;
+  --spacing-pic-lg: 520px;
+  --spacing-pic-sm: 240px;
+  --spacing-story-panel: min(460px, calc(100% - 36px));
+  --spacing-error: 70vh;
+
+  /* Measures: the page, and the widths of the hero's intro, the quote, and each kind of paragraph. */
+  --container-page: 1280px;
+  --container-quote: 900px;
+  --container-hero-intro: 600px;
+  --container-coming: 70ch;
+  --container-reading: 68ch;
+  --container-note: 62ch;
+  --container-lede: 60ch;
+  --container-message: 50ch;
+
+  /* Grids. The footer: the Pinies and their sentence, then the photo credits; the first track is wide enough for
+     the sentence with Piny Studio's mark to stay on one line on a desktop. */
+  --grid-template-columns-footer: 1.8fr 1fr;
+  /* Plain `fr` tracks, as the design has them, rather than Tailwind's numbered columns' minmax(0, 1fr). */
+  --grid-template-columns-stack: 1fr;
+  --grid-template-columns-pair: 1fr 1fr;
+  --grid-template-columns-mosaic: repeat(6, 1fr);
+  --grid-template-columns-log: 1fr 1.4fr;
+  --grid-template-columns-band: 1fr 1.3fr;
+  --grid-template-columns-log-entry: 90px 1fr;
+  --grid-template-columns-log-entry-sm: 70px 1fr;
+  --grid-template-columns-stats: repeat(auto-fit, minmax(150px, 1fr));
+  --grid-template-columns-walk: minmax(0, 720px) 1fr;
+  --grid-template-columns-row: 180px 1fr auto;
+  --grid-template-columns-row-md: 140px 1fr;
+  --grid-template-columns-header: 1fr auto;
+
+  --aspect-photo: 4 / 3;
+  --aspect-photo-wide: 16 / 10;
+
+  /* Motion: the one easing every glide shares. */
+  --ease-glide: cubic-bezier(0.2, 0.8, 0.2, 1);
+}

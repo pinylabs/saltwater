@@ -16,8 +16,9 @@ interface Props {
 const { src, poster, description } = Astro.props;
 ---
 
-<div class="hero__media">
+<div class="absolute inset-0 -z-2 size-full bg-primary-900 dark:bg-primary-950">
 	<video
+		class="absolute inset-0 size-full object-cover"
 		muted
 		loop
 		playsinline

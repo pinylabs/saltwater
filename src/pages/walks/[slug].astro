@@ -34,49 +34,56 @@ const stats = [
 	variant="hero"
 >
 	<main id="main">
-		<section class="walk-hero">
+		<section class="shade-walk relative isolate flex h-walk-hero items-end overflow-hidden text-white max-md:h-walk-hero-sm">
 			<img
-				class="walk-hero__media"
+				class="absolute inset-0 -z-2 size-full object-cover"
 				src={hero}
 				alt={walk.photoAlt}
 				style={`view-transition-name: walk-${walk.slug}`}
 			/>
-			<div class="wrap walk-hero__inner">
-				<p class="crumbs">
-					<a href="/walks">Walks</a>
+			<div class="wrap w-full pb-12">
+				<p class="text-label font-semibold opacity-95">
+					<a class="underline underline-offset-3" href="/walks">Walks</a>
 					{walk.region && <> › {walk.region}</>}
 				</p>
-				<h1 class="rise" style="--i:1">{walk.title}</h1>
+				<h1 class="rise mt-2 text-walk leading-hero max-md:text-walk-sm" style="--i:1">{walk.title}</h1>
 			</div>
 			{walk.photoCredit && (
-				<p class="walk-hero__credit">
-					Photo: <a href={walk.photoCreditUrl}>{walk.photoCredit}</a>
+				<p class="absolute right-10 bottom-3 text-credit opacity-85 max-md:right-4.5">
+					Photo: <a class="underline underline-offset-3" href={walk.photoCreditUrl}>{walk.photoCredit}</a>
 				</p>
 			)}
 		</section>
 
 		{stats.length > 0 && (
-			<section class="stats" aria-label="The walk in numbers">
-				<div class="wrap stats__inner">
+			<section class="bg-primary-700 text-neutral-50 dark:bg-primary-800" aria-label="The walk in numbers">
+				{/* The design's own band: 22px above and below the numbers, which start at the column's edge without
+				    the page's side padding, on a phone too. */}
+				<div class="wrap grid grid-cols-stats px-0 py-5.5 max-md:grid-cols-pair">
 					{stats.map((stat) => (
-						<div>
-							<b>{stat.value}</b>
-							<small>{stat.label}</small>
+						<div class="border-r border-white/12 py-5.5 pl-5.5 first:pl-0 last:border-r-0 max-md:border-r-0 max-md:pl-0">
+							<b class="block font-display font-condensed text-title leading-solid font-extrabold uppercase">{stat.value}</b>
+							<small class="text-caption tracking-widest uppercase opacity-75">{stat.label}</small>
 						</div>
 					))}
 				</div>
 			</section>
 		)}
 
-		<section class="coming-panel" aria-label={coming ? "This walk is coming" : "This walk was checked"}>
-			<div class="wrap coming-panel__inner">
-				<strong>{coming ? "Coming" : "Walked"}</strong>
-				<p>
+		<section
+			class="bg-secondary-400 text-neutral-800"
+			aria-label={coming ? "This walk is coming" : "This walk was checked"}
+		>
+			<div class="wrap flex flex-wrap items-baseline gap-x-6 gap-y-2 py-5">
+				<strong class="font-display font-condensed text-quote font-extrabold tracking-wide uppercase">
+					{coming ? "Coming" : "Walked"}
+				</strong>
+				<p class="max-w-coming text-nav leading-comfy">
 					{coming
 						? walk.comingNote || "Nobody has walked this route for Saltwater yet."
 						: walk.summary}
 				</p>
-				<p class="coming-panel__checked">
+				<p class="max-w-coming text-nav leading-comfy font-semibold whitespace-nowrap">
 					{walk.lastChecked
 						? `Last checked ${walk.lastChecked}`
 						: "Last checked: no date yet"}
@@ -85,10 +92,11 @@ const stats = [
 		</section>
 
 		{story.length > 0 && (
-			<section class="story" aria-label="The walk in pictures">
-				<div class="story__stage">
+			<section class="story relative bg-primary-950" aria-label="The walk in pictures">
+				<div class="story-stage sticky top-0 h-screen overflow-hidden">
 					{story.map((stop, index) => (
 						<img
+							class="absolute inset-0 size-full object-cover"
 							src={stop.photo}
 							alt={stop.photoAlt}
 							loading={index === 0 ? "eager" : "lazy"}
@@ -97,14 +105,17 @@ const stats = [
 						/>
 					))}
 				</div>
-				<div class="story__panels">
+				<div class="story-panels relative">
 					{story.map((stop, index) => (
-						<div class="story__panel" style={`--timeline: --story-${index}`}>
-							<h2>{stop.title}</h2>
-							{stop.text && <p>{stop.text}</p>}
+						<div
+							class="story-panel ml-10 w-story-panel rounded-card bg-tertiary-50/95 px-7 py-6.5 text-neutral-800 shadow-panel max-md:ml-4.5"
+							style={`--timeline: --story-${index}`}
+						>
+							<h2 class="text-title-md leading-heading max-md:text-title-sm">{stop.title}</h2>
+							{stop.text && <p class="mt-2.5 font-serif text-read leading-comfy">{stop.text}</p>}
 							{stop.photoCredit && (
-								<small>
-									Photo: <a href={stop.photoCreditUrl}>{stop.photoCredit}</a>
+								<small class="mt-3 block text-credit text-neutral-600">
+									Photo: <a class="underline underline-offset-2" href={stop.photoCreditUrl}>{stop.photoCredit}</a>
 								</small>
 							)}
 						</div>
@@ -113,16 +124,16 @@ const stats = [
 			</section>
 		)}
 
-		<div class="wrap walk-body">
-			<article>
+		<div class="wrap grid grid-cols-walk gap-16 pt-16 pb-20 max-md:grid-cols-stack max-md:gap-8 max-md:pt-10 max-md:pb-14">
+			<article class="walk-prose">
 				<PortableText value={walk.body} />
 			</article>
 
-			<aside class="walk-aside reveal">
+			<aside class="reveal self-start md:sticky md:top-6">
 				{stops.length > 0 && (
-					<div class="route-card">
-						<h2>The route</h2>
-						<svg viewBox="0 0 240 300" fill="none" aria-hidden="true">
+					<div class="rounded-card border border-tertiary-200 bg-tertiary-50 p-5.5 dark:border-neutral-700 dark:bg-neutral-900">
+						<h2 class="text-title-xs leading-solid">The route</h2>
+						<svg class="my-2.5 h-auto w-full" viewBox="0 0 240 300" fill="none" aria-hidden="true">
 							<path
 								d="M40 0 C70 40 30 70 60 100 S 40 160 80 190 S 60 260 110 300"
 								stroke="currentColor"
@@ -130,7 +141,6 @@ const stats = [
 								stroke-width="40"
 								stroke-linecap="round"></path>
 							<path
-								class="route-card__path"
 								d="M60 20 C90 50 50 80 80 110 S 60 170 100 200 S 90 250 130 280"
 								stroke="#0b4f6c"
 								stroke-width="5"
@@ -142,15 +152,15 @@ const stats = [
 								<circle cx="130" cy="280" r="7"></circle>
 							</g>
 						</svg>
-						<small>A sketch, not to scale.</small>
-						<ol>
+						<small class="text-credit text-neutral-600 dark:text-neutral-300">A sketch, not to scale.</small>
+						<ol class="list-decimal pl-5 text-nav leading-list text-neutral-600 dark:text-neutral-300">
 							{stops.map((stop) => <li>{stop}</li>)}
 						</ol>
 					</div>
 				)}
 
-				<div class="checked-box">
-					<b>{coming ? "Not walked yet" : "Last checked"}</b>
+				<div class="mt-4 rounded-box bg-secondary-400 px-4 py-3.5 text-label leading-comfy text-neutral-800">
+					<b class="block text-caption tracking-wider uppercase">{coming ? "Not walked yet" : "Last checked"}</b>
 					{walk.lastChecked
 						? `A person walked this route and checked it on ${walk.lastChecked}.`
 						: "No one has walked this route for Saltwater yet, so there is no date to show. It goes up once there is one."}

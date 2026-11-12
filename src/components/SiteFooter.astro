@@ -15,25 +15,35 @@ interface Props {
 }
 
 const { credits, made, line, siteName } = Astro.props;
+
+// The sentence of who made the site, with "Piny" in it made a link to Piny Studio that carries its mark.
+const sentence = made ?? "Made by the Pinies in Piny, on EmDash.";
+const at = sentence.search(/\bPiny\b/);
+const before = at < 0 ? sentence : sentence.slice(0, at);
+const after = at < 0 ? "" : sentence.slice(at + "Piny".length);
 ---
 
-<footer class="footer">
-	<div class="wrap footer__inner">
-		<div class="footer__made">
+<footer class="on-dark bg-primary-900 pt-14 pb-10 text-primary-100 dark:bg-primary-950">
+	<div class="wrap grid grid-cols-footer items-end gap-10 max-md:grid-cols-stack max-md:gap-7">
+		<div class="flex items-end gap-4.5 max-md:flex-col max-md:items-start max-md:gap-3.5">
 			<PiniesFaces />
-			<p>
-				{made ?? "Made by the Pinies in Piny, on EmDash."}
+			<p class="font-serif text-lead leading-snug">
+				{before}{at >= 0 && (
+					<a class="whitespace-nowrap underline underline-offset-3" href="https://piny.studio/home/"
+						><img class="me-1 inline-block size-5 align-middle" src="/brand/piny-studio-mark.png" width="20" height="20" alt="" />Piny Studio</a
+					>
+				)}{after}
 				{line && <><br />{line}</>}
 			</p>
 		</div>
-		<p class="footer__credits">
-			Photos on <a href="https://unsplash.com/license">Unsplash</a> and the video
-			on <a href="https://www.pexels.com/license/">Pexels</a>, by{" "}
+		<p class="text-caption leading-loose opacity-85">
+			Photos on <a class="underline decoration-white/35 underline-offset-3" href="https://unsplash.com/license">Unsplash</a> and the video
+			on <a class="underline decoration-white/35 underline-offset-3" href="https://www.pexels.com/license/">Pexels</a>, by{" "}
 			{
 				credits.map((credit, index) => (
 					<>
 						{index > 0 && (index === credits.length - 1 ? " and " : ", ")}
-						<a href={credit.url}>{credit.name}</a>
+						<a class="underline decoration-white/35 underline-offset-3" href={credit.url}>{credit.name}</a>
 					</>
 				))
 			}. Linked from their pages, never copied into {siteName}.

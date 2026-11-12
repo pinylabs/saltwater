@@ -23,32 +23,64 @@ const note = walked
 		: "Not walked yet · Last checked: no date yet.";
 
 const facts = [walk.distance, walk.duration, walk.transport].filter(Boolean);
+const big = walk.cardSize === "big";
+
+// Its place in the mosaic: the big card spans four columns and two rows, a small one two, a wide one three.
+const span = {
+	big: "col-span-4 row-span-2",
+	small: "col-span-2",
+	wide: "col-span-3",
+}[walk.cardSize];
 ---
 
 <a
-	class:list={["card", "lift-card", `card--${walk.cardSize}`, "reveal"]}
+	class:list={[
+		"lift-card reveal flex flex-col overflow-hidden rounded-card bg-tertiary-50 shadow-card hover:shadow-lift dark:bg-neutral-900 dark:shadow-card-dark dark:hover:shadow-lift-dark",
+		span,
+		"max-md:col-auto max-md:row-auto",
+	]}
 	href={`/walks/${walk.slug}`}
 >
-	<div class="card__pic">
+	<div class:list={["relative flex-1 overflow-hidden max-md:min-h-pic-sm", big ? "min-h-pic-lg" : "min-h-pic"]}>
 		<img
+			class="lift-photo absolute inset-0 size-full object-cover"
 			src={walk.photo}
 			alt={walk.photoAlt}
 			loading="lazy"
 			decoding="async"
 			style={`view-transition-name: walk-${walk.slug}`}
 		/>
-		{walk.grade && <span class="card__grade">{walk.grade}</span>}
-		<span class="card__status">{badge}</span>
-		{walk.photoCredit && <span class="card__credit">Photo: {walk.photoCredit}</span>}
+		{walk.grade && (
+			<span class="absolute top-4 left-4 rounded-pill bg-secondary-400 px-3 py-1.5 text-caption leading-badge font-bold text-neutral-800">
+				{walk.grade}
+			</span>
+		)}
+		<span class="absolute top-4 right-4 rounded-pill bg-primary-900/82 px-2.75 py-1.75 text-tag leading-badge font-bold tracking-wider text-white uppercase">
+			{badge}
+		</span>
+		{walk.photoCredit && (
+			<span class="absolute right-3 bottom-2.5 rounded-pill bg-primary-950/75 px-2 py-0.5 text-tag leading-body text-white">
+				Photo: {walk.photoCredit}
+			</span>
+		)}
 	</div>
-	<div class="card__text">
-		<h3>{walk.title}</h3>
-		{walk.summary && <p class="card__summary">{walk.summary}</p>}
+	<div class="px-5.5 pt-4.5 pb-5.5">
+		<h3 class:list={["leading-heading", big ? "text-display-md max-md:text-title-md" : "text-title-sm"]}>{walk.title}</h3>
+		{walk.summary && (
+			<p class="mt-2 font-serif text-note leading-cozy text-neutral-600 dark:text-neutral-300">{walk.summary}</p>
+		)}
 		{facts.length > 0 && (
-			<p class="card__facts">
+			<p class="mt-3 flex flex-wrap gap-4 text-label font-semibold text-primary-700 dark:text-primary-400">
 				{facts.map((fact) => <span>{fact}</span>)}
 			</p>
 		)}
-		<p class="card__coming">{note}</p>
+		<p
+			class:list={[
+				"mt-3 border-t border-tertiary-200 pt-3 leading-comfy text-neutral-600 dark:border-neutral-700 dark:text-neutral-300",
+				big ? "text-label" : "text-caption",
+			]}
+		>
+			{note}
+		</p>
 	</div>
 </a>
