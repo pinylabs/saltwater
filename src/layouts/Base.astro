@@ -358,7 +358,16 @@ const year = new Date().getFullYear();
 				<div class="site-footer__pinies">
 					<Pinies />
 					<p>
-						Made by the Pinies in <a href="https://piny.studio/home/">Piny</a>,
+						Made by the Pinies in <a
+							class="site-footer__piny"
+							href="https://piny.studio/home/"
+							><img
+								src="/brand/piny-studio-mark.png"
+								width="21"
+								height="21"
+								alt=""
+							/><span>Piny Studio</span></a
+						>,
 						on <a href="https://emdashcms.com">EmDash</a>.<br />Walked and
 						checked by people.
 					</p>
@@ -1448,7 +1457,8 @@ const year = new Date().getFullYear();
 
 			.site-footer__made {
 				display: grid;
-				grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+				/* Wide enough a first track for the Pinies' sentence, with Piny Studio's mark, to stay on one line. */
+				grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
 				align-items: end;
 				gap: 40px;
 				padding-block: var(--spacing-10);
@@ -1465,6 +1475,19 @@ const year = new Date().getFullYear();
 				font-family: var(--font-serif);
 				font-size: var(--font-size-lg);
 				line-height: 1.4;
+			}
+
+			/* Piny Studio's lockup: its mark sized to the line and centred on it, so the line keeps its height. */
+			.site-footer__piny {
+				font-weight: 500;
+			}
+
+			.site-footer__piny img {
+				display: inline-block;
+				width: 1.1em;
+				height: 1.1em;
+				margin-inline-end: 0.3em;
+				vertical-align: middle;
 			}
 
 			.site-footer__credits {
