@@ -10,10 +10,10 @@
   both modes at once; use light-dark(<light>, <dark>) in an override to
   keep them distinct.
 
-  --font-body is defined by the font pipeline in astro.config.mjs, not
-  here. To swap the loaded webfont, edit the fonts entry there. To use a
-  system font, or a different face for headings only, override
-  --font-body / --font-heading in theme.css.
+  --font-body is not defined here: Saltwater sets it in theme.css, with
+  the faces its Google Fonts link in src/layouts/Base.astro loads.
+  --font-mono comes from the font pipeline in astro.config.mjs. Override
+  --font-body / --font-heading / --font-serif in theme.css.
 */
 
 @layer base {
@@ -40,6 +40,11 @@
 		--color-brand-hover: light-dark(#404040, #d4d4d4);
 		--color-on-brand: light-dark(#ffffff, #0a0a0a);
 		--color-brand-ring: color-mix(in srgb, var(--color-brand) 15%, transparent);
+		--color-accent: var(--color-brand); /* primary buttons and pills */
+		--color-accent-hover: var(--color-brand-hover);
+		--color-on-accent: var(--color-on-brand);
+		--color-deep: light-dark(#171717, #141414); /* header and footer */
+		--color-on-deep: #ededed;
 
 		/* EmDash search theming */
 		--emdash-search-bg: var(--color-surface);
@@ -51,6 +56,9 @@
 
 		/* Typography */
 		--font-heading: var(--font-body);
+		--font-serif: Georgia, serif; /* reading text: prose, leads, excerpts */
+		--font-stretch-heading: normal; /* headings and eyebrows */
+		--text-transform-heading: none;
 		--font-weight-heading: 600; /* h2-h6, card and list titles */
 		--font-weight-display: 600; /* h1 and large page titles */
 
@@ -171,6 +179,7 @@
 			--color-brand: #171717;
 			--color-brand-hover: #404040;
 			--color-on-brand: #ffffff;
+			--color-deep: #171717;
 		}
 	}
 }

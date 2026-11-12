@@ -11,6 +11,7 @@ import LiveSearch from "emdash/ui/search";
 import { Font } from "astro:assets";
 import { getSiteLocale } from "../utils/locale";
 import { resolveBlogSiteIdentity } from "../utils/site-identity";
+import Pinies from "../components/Pinies.astro";
 import "../styles/tokens.css";
 import "../styles/theme.css";
 
@@ -103,7 +104,6 @@ function navCurrent(url: string): "page" | "true" | undefined {
 }
 
 const lang = getSiteLocale() ?? "en";
-const monogram = [...siteTitle.trim()][0]?.toUpperCase() ?? "";
 const year = new Date().getFullYear();
 ---
 
@@ -112,7 +112,11 @@ const year = new Date().getFullYear();
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<Font cssVariable="--font-body" preload />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Sans:wght@400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap"
+		/>
 		<Font cssVariable="--font-mono" />
 		<title>{fullTitle}</title>
 		<EmDashHead page={pageCtx} />
@@ -151,11 +155,18 @@ const year = new Date().getFullYear();
 							/>
 						) : (
 							<>
-								{monogram && (
-									<span class="brand__mark" aria-hidden="true">
-										{monogram}
-									</span>
-								)}
+								<svg
+									class="brand__mark"
+									viewBox="0 0 32 32"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="3"
+									stroke-linecap="round"
+									aria-hidden="true"
+									><path
+										d="M3 12c4-4 8-4 12 0s8 4 14 0M3 21c4-4 8-4 12 0s8 4 14 0"
+									></path></svg
+								>
 								<span class="brand__name">{siteTitle}</span>
 							</>
 						)
@@ -257,7 +268,7 @@ const year = new Date().getFullYear();
 			<slot />
 		</main>
 
-		<footer class="site-footer band">
+		<footer class="site-footer">
 			<div class="frame site-footer__grid">
 				<div class="site-footer__brand">
 					<a href="/" class="brand">
@@ -270,11 +281,18 @@ const year = new Date().getFullYear();
 								/>
 							) : (
 								<>
-									{monogram && (
-										<span class="brand__mark" aria-hidden="true">
-											{monogram}
-										</span>
-									)}
+									<svg
+										class="brand__mark"
+										viewBox="0 0 32 32"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="3"
+										stroke-linecap="round"
+										aria-hidden="true"
+										><path
+											d="M3 12c4-4 8-4 12 0s8 4 14 0M3 21c4-4 8-4 12 0s8 4 14 0"
+										></path></svg
+									>
 									<span class="brand__name">{siteTitle}</span>
 								</>
 							)
@@ -336,12 +354,38 @@ const year = new Date().getFullYear();
 					<WidgetArea name="footer" />
 				</div>
 			</div>
-			<div class="band site-footer__bottom">
-				<div class="frame site-footer__bottom-inner">
-					<p class="site-footer__meta">
-						{`© ${year} ${siteTitle}.`} Powered by{" "}
-						<a href="https://emdashcms.com">EmDash</a>
+			<div class="frame site-footer__made">
+				<div class="site-footer__pinies">
+					<Pinies />
+					<p>
+						Made by the Pinies in <a href="https://piny.studio/home/">Piny</a>,
+						on <a href="https://emdashcms.com">EmDash</a>.<br />Walked and
+						checked by people.
 					</p>
+				</div>
+				<p class="site-footer__credits">
+					Photos on Unsplash, by <a
+						href="https://unsplash.com/photos/a-person-standing-on-a-cliff-overlooking-the-ocean-TfME1TgD-hQ"
+						>Dominic Kurniawan Suryaputra</a
+					>, <a href="https://unsplash.com/photos/sea-cliff-during-daytime-GKrux4c4Sbc"
+						>Gary Runn</a
+					>, <a
+						href="https://unsplash.com/photos/white-cliffs-towering-over-a-deep-blue-ocean-hf23qR1E3dw"
+						>Matt Str</a
+					>, <a
+						href="https://unsplash.com/photos/a-red-and-white-lighthouse-sitting-on-top-of-a-cliff-next-to-the-ocean-vDBVSOp38yE"
+						>Steven Zhang</a
+					>, <a
+						href="https://unsplash.com/photos/blue-and-brown-swimming-pool-beside-blue-and-white-ocean-water-during-daytime-eBQ7Uzux3qk"
+						>Kelvin Li</a
+					> and <a href="https://unsplash.com/photos/blue-body-of-water-near-cliff-YPZPUwJIwak"
+						>Jack Bass</a
+					>.
+				</p>
+			</div>
+			<div class="site-footer__bottom">
+				<div class="frame site-footer__bottom-inner">
+					<p class="site-footer__meta">{`© ${year} ${siteTitle}.`}</p>
 					<div class="theme-switcher" role="group" aria-label="Color theme">
 						<button
 							type="button"
@@ -469,6 +513,43 @@ const year = new Date().getFullYear();
 			 */
 			@layer base;
 
+			/*
+			 * Page changes: the home's cross-document view transition
+			 * (src/pages/index.astro), so moving between the home and these
+			 * pages fades and slides the same way. Still under reduced motion.
+			 */
+			@view-transition {
+				navigation: auto;
+			}
+
+			::view-transition-old(root) {
+				animation: 260ms cubic-bezier(0.4, 0, 1, 1) both vt-out;
+			}
+
+			::view-transition-new(root) {
+				animation: 420ms cubic-bezier(0, 0, 0.2, 1) 80ms both vt-in;
+			}
+
+			@keyframes vt-out {
+				to {
+					opacity: 0;
+					transform: translateY(-12px);
+				}
+			}
+
+			@keyframes vt-in {
+				from {
+					opacity: 0;
+					transform: translateY(24px);
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				@view-transition {
+					navigation: none;
+				}
+			}
+
 			@layer base {
 				*:where(:not([class*="emdash"]):not([class*="ec-"])),
 				*:where(:not([class*="emdash"]):not([class*="ec-"]))::before,
@@ -547,23 +628,6 @@ const year = new Date().getFullYear();
 					-moz-osx-font-smoothing: grayscale;
 				}
 
-				/*
-				 * The frame rails: two hairlines that run the full height of
-				 * the page at the edges of the content frame. Fixed and behind
-				 * everything, so any surface with a background covers them.
-				 */
-				body::before {
-					content: "";
-					position: fixed;
-					inset-block: 0;
-					inset-inline: 0;
-					z-index: -1;
-					width: var(--frame-width);
-					margin-inline: auto;
-					border-inline: 1px solid var(--color-border);
-					pointer-events: none;
-				}
-
 				main {
 					flex: 1;
 				}
@@ -607,6 +671,8 @@ const year = new Date().getFullYear();
 					font-family: var(--font-heading);
 					line-height: var(--leading-tight);
 					font-weight: var(--font-weight-heading);
+					font-stretch: var(--font-stretch-heading);
+					text-transform: var(--text-transform-heading);
 					letter-spacing: var(--tracking-snug);
 					text-wrap: balance;
 					overflow-wrap: break-word;
@@ -686,49 +752,9 @@ const year = new Date().getFullYear();
 					padding-inline: var(--frame-padding);
 				}
 
-				/* A full-bleed horizontal section, ruled off with a hairline */
+				/* A full-bleed horizontal section; Saltwater's sections run on without rules, as on the home */
 				.band {
 					position: relative;
-					border-top: 1px solid var(--color-border);
-				}
-
-				/* Crosshairs where the band's rule meets the rails */
-				.band::before,
-				.band::after {
-					content: "";
-					position: absolute;
-					top: -5px;
-					width: 9px;
-					height: 9px;
-					background:
-						linear-gradient(
-								var(--color-border-strong),
-								var(--color-border-strong)
-							)
-							center / 1px 100% no-repeat,
-						linear-gradient(
-								var(--color-border-strong),
-								var(--color-border-strong)
-							)
-							center / 100% 1px no-repeat;
-					pointer-events: none;
-				}
-
-				.band::before {
-					inset-inline-start: calc((100% - var(--frame-width)) / 2 - 4px);
-				}
-
-				.band::after {
-					inset-inline-end: calc((100% - var(--frame-width)) / 2 - 4px);
-				}
-
-				main > .band:first-child {
-					border-top: 0;
-				}
-
-				main > .band:first-child::before,
-				main > .band:first-child::after {
-					content: none;
 				}
 
 				/* Vertical rhythm for content bands */
@@ -744,14 +770,17 @@ const year = new Date().getFullYear();
 
 				.intro__title {
 					font-size: var(--font-size-display);
-					line-height: 1.05;
+					line-height: var(--leading-tight);
 					max-width: 22ch;
 				}
 
 				.intro__subtitle {
+					font-family: var(--font-heading);
 					font-size: var(--font-size-display);
 					font-weight: var(--font-weight-display);
-					line-height: 1.05;
+					font-stretch: var(--font-stretch-heading);
+					text-transform: var(--text-transform-heading);
+					line-height: var(--leading-tight);
 					letter-spacing: var(--tracking-tight);
 					color: var(--color-muted);
 					max-width: 22ch;
@@ -761,26 +790,28 @@ const year = new Date().getFullYear();
 
 				.intro__lead {
 					margin-top: var(--spacing-5);
-					font-size: var(--font-size-lg);
-					line-height: var(--leading-normal);
+					font-family: var(--font-serif);
+					font-size: clamp(1.1875rem, 1.05rem + 0.6vw, 1.5rem);
+					line-height: 1.4;
 					color: var(--color-text-secondary);
 					max-width: 60ch;
 					overflow-wrap: break-word;
 				}
 
 				.eyebrow + .intro__title {
-					margin-top: var(--spacing-4);
+					margin-top: var(--spacing-3);
 				}
 
-				/* Mono uppercase label */
+				/* The home's eyebrow: condensed uppercase label in sea */
 				.eyebrow {
-					font-family: var(--font-mono);
-					font-size: var(--font-size-label);
-					font-weight: 500;
+					font-family: var(--font-heading);
+					font-size: var(--font-size-base);
+					font-weight: var(--font-weight-heading);
+					font-stretch: var(--font-stretch-heading);
 					line-height: var(--leading-snug);
 					letter-spacing: var(--tracking-wider);
 					text-transform: uppercase;
-					color: var(--color-muted);
+					color: var(--color-brand);
 				}
 
 				/* Section heading row: title on the start side, link on the end */
@@ -793,7 +824,7 @@ const year = new Date().getFullYear();
 				}
 
 				.section-head__title {
-					font-size: var(--font-size-xl);
+					font-size: var(--font-size-4xl);
 				}
 
 				.arrow-link {
@@ -853,7 +884,7 @@ const year = new Date().getFullYear();
 					background: var(--color-surface);
 					box-shadow: inset 0 0 0 1px var(--color-border);
 					font-size: var(--font-size-xs);
-					font-weight: 500;
+					font-weight: 600;
 					line-height: 1.375rem;
 					color: var(--color-text-secondary);
 					text-decoration: none;
@@ -870,21 +901,21 @@ const year = new Date().getFullYear();
 					box-shadow: inset 0 0 0 1px var(--color-border-strong);
 				}
 
-				/* Pill buttons */
+				/* Pill buttons: the home's sun pill */
 				.btn {
 					display: inline-flex;
 					align-items: center;
 					justify-content: center;
 					gap: var(--spacing-2);
-					min-height: 2.5rem;
-					padding: var(--spacing-2) var(--spacing-5);
+					min-height: 2.75rem;
+					padding: var(--spacing-3) 22px;
 					border: 0;
 					border-radius: var(--radius-full);
-					background: var(--color-brand);
-					color: var(--color-on-brand);
+					background: var(--color-accent);
+					color: var(--color-on-accent);
 					font: inherit;
-					font-size: var(--font-size-sm);
-					font-weight: 500;
+					font-size: 0.9375rem;
+					font-weight: 600;
 					line-height: 1;
 					white-space: nowrap;
 					text-decoration: none;
@@ -893,11 +924,18 @@ const year = new Date().getFullYear();
 						background-color var(--transition-fast),
 						color var(--transition-fast),
 						box-shadow var(--transition-fast),
-						scale var(--transition-fast);
+						scale var(--transition-fast),
+						translate var(--transition-base);
 				}
 
 				.btn:hover {
-					background: var(--color-brand-hover);
+					background: var(--color-accent-hover);
+				}
+
+				@media (prefers-reduced-motion: no-preference) {
+					.btn:hover {
+						translate: 0 -2px;
+					}
 				}
 
 				.btn:active {
@@ -963,7 +1001,43 @@ const year = new Date().getFullYear();
 						auto-fill,
 						minmax(min(100%, 300px), 1fr)
 					);
-					gap: var(--spacing-6);
+					gap: 22px;
+				}
+
+				/*
+				 * The home's mosaic of walks: the first card big, the next two
+				 * small beside it, the rest in pairs, and an odd last card the
+				 * full width so no row is left with a hole.
+				 */
+				@media (min-width: 768px) {
+					.post-mosaic {
+						grid-template-columns: repeat(6, minmax(0, 1fr));
+						grid-auto-flow: dense;
+					}
+
+					.post-mosaic > * {
+						grid-column: span 3;
+					}
+
+					.post-mosaic > :first-child {
+						grid-column: span 4;
+						grid-row: span 2;
+					}
+
+					.post-mosaic > :nth-child(2),
+					.post-mosaic > :nth-child(3) {
+						grid-column: span 2;
+					}
+
+					.post-mosaic > :first-child:nth-last-child(2) {
+						grid-row: span 1;
+					}
+
+					.post-mosaic > :only-child,
+					.post-mosaic > :nth-child(n + 4):nth-child(even):last-child {
+						grid-column: 1 / -1;
+						grid-row: span 1;
+					}
 				}
 
 				/* Empty and not-found states */
@@ -997,52 +1071,38 @@ const year = new Date().getFullYear();
 		</style>
 
 		<style>
+			/* Header and footer: deep sea blue, as the home's header over its hero and its footer */
+			.site-header,
+			.site-footer {
+				/* Focus rings and the search field's ring read on the deep blue in sun */
+				--color-brand: var(--color-accent);
+				--color-brand-ring: rgb(255 207 77 / 0.35);
+				color: var(--color-on-deep);
+				background: var(--color-deep);
+			}
+
 			.site-header {
 				position: sticky;
 				top: 0;
 				z-index: 50;
-				background: color-mix(in srgb, var(--color-bg) 82%, transparent);
-				backdrop-filter: saturate(1.4) blur(12px);
-				-webkit-backdrop-filter: saturate(1.4) blur(12px);
-				border-bottom: 1px solid var(--color-border);
+				color: #fff;
+				border-bottom: 1px solid rgb(207 227 234 / 0.12);
 			}
 
-			.site-header::before,
-			.site-header::after {
-				content: "";
+			/* Over a walk's photo the header sits on the picture, as on the home's hero */
+			:global(body:has(.post-header--hero)) .site-header {
 				position: absolute;
-				bottom: -5px;
-				width: 9px;
-				height: 9px;
-				background:
-					linear-gradient(
-							var(--color-border-strong),
-							var(--color-border-strong)
-						)
-						center / 1px 100% no-repeat,
-					linear-gradient(
-							var(--color-border-strong),
-							var(--color-border-strong)
-						)
-						center / 100% 1px no-repeat;
-				pointer-events: none;
-			}
-
-			.site-header::before {
-				inset-inline-start: calc((100% - var(--frame-width)) / 2 - 4px);
-			}
-
-			.site-header::after {
-				inset-inline-end: calc((100% - var(--frame-width)) / 2 - 4px);
+				inset: 0 0 auto;
+				background: transparent;
+				border-bottom-color: transparent;
 			}
 
 			.site-header__inner {
 				display: flex;
 				align-items: center;
-				gap: var(--spacing-6);
+				gap: var(--spacing-6) 30px;
 				min-height: var(--nav-height);
 				padding-block: var(--spacing-2);
-				border-inline: 1px solid var(--color-border);
 			}
 
 			.brand {
@@ -1050,25 +1110,21 @@ const year = new Date().getFullYear();
 				align-items: center;
 				gap: 10px;
 				min-width: 0;
-				font-size: var(--font-size-base);
-				font-weight: 600;
-				letter-spacing: -0.01em;
-				color: var(--color-text);
+				font-family: var(--font-heading);
+				font-size: 30px;
+				font-weight: 800;
+				font-stretch: var(--font-stretch-heading);
+				letter-spacing: 0.02em;
+				line-height: 1;
+				text-transform: uppercase;
+				color: #fff;
 				text-decoration: none;
 			}
 
 			.brand__mark {
-				display: grid;
-				place-items: center;
 				flex-shrink: 0;
-				width: 1.75rem;
-				height: 1.75rem;
-				border-radius: var(--radius);
-				background: var(--color-brand);
-				color: var(--color-on-brand);
-				font-size: var(--font-size-sm);
-				font-weight: 600;
-				letter-spacing: 0;
+				width: 30px;
+				height: 30px;
 			}
 
 			.brand__name {
@@ -1079,9 +1135,9 @@ const year = new Date().getFullYear();
 			}
 
 			.brand__logo {
-				height: 32px;
+				height: 36px;
 				width: auto;
-				max-width: 180px;
+				max-width: 200px;
 				object-fit: contain;
 			}
 
@@ -1093,36 +1149,31 @@ const year = new Date().getFullYear();
 			.site-nav ul {
 				display: flex;
 				flex-wrap: wrap;
-				gap: 2px;
+				gap: 2px 30px;
 				list-style: none;
 			}
 
 			.site-nav a {
 				display: block;
-				padding: 6px 12px;
-				border-radius: var(--radius-full);
-				font-size: var(--font-size-sm);
-				font-weight: 500;
-				color: var(--color-text-secondary);
+				padding-block: 6px;
+				font-size: 15px;
+				font-weight: 600;
+				color: rgb(255 255 255 / 0.86);
 				text-decoration: none;
 				white-space: nowrap;
+				box-shadow: inset 0 -2px 0 transparent;
 				transition:
 					color var(--transition-fast),
-					background-color var(--transition-fast),
 					box-shadow var(--transition-fast);
 			}
 
 			.site-nav a:hover {
-				color: var(--color-text);
-				background: var(--color-fill);
+				color: #fff;
 			}
 
 			.site-nav a[aria-current] {
-				color: var(--color-text);
-				background: var(--color-surface);
-				box-shadow:
-					inset 0 0 0 1px var(--color-border),
-					var(--shadow-sm);
+				color: #fff;
+				box-shadow: inset 0 -2px 0 var(--color-accent);
 			}
 
 			.site-header__actions {
@@ -1130,6 +1181,12 @@ const year = new Date().getFullYear();
 				align-items: center;
 				gap: var(--spacing-2);
 				margin-inline-start: auto;
+			}
+
+			.site-header .nav-admin {
+				background: rgb(255 255 255 / 0.16);
+				color: #fff;
+				box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4);
 			}
 
 			.site-search {
@@ -1145,7 +1202,7 @@ const year = new Date().getFullYear();
 				width: 16px;
 				height: 16px;
 				translate: 0 -50%;
-				color: var(--color-muted);
+				color: rgb(255 255 255 / 0.75);
 				pointer-events: none;
 			}
 
@@ -1156,13 +1213,15 @@ const year = new Date().getFullYear();
 
 			.site-search :global(.site-search-input) {
 				width: 100%;
-				height: 36px;
+				height: 38px;
 				padding-block: 0;
 				padding-inline: 36px 48px;
-				border: 1px solid var(--color-border);
+				border: 1px solid rgb(255 255 255 / 0.32);
 				border-radius: var(--radius-full);
-				background: var(--color-surface);
-				color: var(--color-text);
+				background: rgb(255 255 255 / 0.12);
+				-webkit-backdrop-filter: blur(8px);
+				backdrop-filter: blur(8px);
+				color: #fff;
 				font-family: var(--font-body);
 				font-size: var(--font-size-sm);
 				transition:
@@ -1171,16 +1230,16 @@ const year = new Date().getFullYear();
 			}
 
 			.site-search :global(.site-search-input)::placeholder {
-				color: var(--color-muted);
+				color: rgb(255 255 255 / 0.72);
 			}
 
 			.site-search :global(.site-search-input):hover {
-				border-color: var(--color-border-strong);
+				border-color: rgb(255 255 255 / 0.55);
 			}
 
 			.site-search :global(.site-search-input):focus {
 				outline: 2px solid transparent;
-				border-color: var(--color-muted);
+				border-color: var(--color-accent);
 				box-shadow: 0 0 0 3px var(--color-brand-ring);
 			}
 
@@ -1191,9 +1250,9 @@ const year = new Date().getFullYear();
 				translate: 0 -50%;
 				padding: 2px 6px;
 				border-radius: var(--radius-sm);
-				background: var(--color-bg);
-				box-shadow: inset 0 0 0 1px var(--color-border);
-				color: var(--color-muted);
+				background: rgb(255 255 255 / 0.1);
+				box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.2);
+				color: rgb(255 255 255 / 0.75);
 				font-size: 11px;
 				font-weight: 500;
 				line-height: 1.4;
@@ -1206,6 +1265,7 @@ const year = new Date().getFullYear();
 				opacity: 0;
 			}
 
+			/* The results open on a card, in the page's own colors */
 			.site-search :global(.site-search-results) {
 				top: calc(100% + 8px);
 				inset-inline: auto 0;
@@ -1213,7 +1273,7 @@ const year = new Date().getFullYear();
 				margin-top: 0;
 				padding: 6px;
 				border: 0;
-				border-radius: 14px;
+				border-radius: 16px;
 				background: var(--color-surface);
 				box-shadow: var(--shadow-lg);
 				max-height: min(420px, 70vh);
@@ -1249,14 +1309,18 @@ const year = new Date().getFullYear();
 
 			.site-search :global(.emdash-live-search-result-title) {
 				order: 2;
-				font-size: var(--font-size-sm);
-				font-weight: 500;
+				font-family: var(--font-heading);
+				font-size: var(--font-size-lg);
+				font-weight: 800;
+				font-stretch: var(--font-stretch-heading);
+				line-height: 1;
+				text-transform: uppercase;
 			}
 
 			.site-search :global(.emdash-live-search-result-collection) {
 				order: 1;
-				font-family: var(--font-mono);
 				font-size: 11px;
+				font-weight: 600;
 				letter-spacing: var(--tracking-wider);
 				text-transform: uppercase;
 				color: var(--color-muted);
@@ -1268,7 +1332,8 @@ const year = new Date().getFullYear();
 				-webkit-line-clamp: 2;
 				-webkit-box-orient: vertical;
 				overflow: hidden;
-				font-size: var(--font-size-xs);
+				font-family: var(--font-serif);
+				font-size: var(--font-size-sm);
 				line-height: var(--leading-snug);
 				color: var(--color-text-secondary);
 			}
@@ -1276,7 +1341,7 @@ const year = new Date().getFullYear();
 			.site-search :global(.emdash-live-search-result-snippet mark) {
 				padding: 0 2px;
 				border-radius: 3px;
-				background: var(--color-fill-strong);
+				background: rgb(255 207 77 / 0.45);
 				color: var(--color-text);
 			}
 
@@ -1284,19 +1349,48 @@ const year = new Date().getFullYear();
 				display: none;
 			}
 
-			/* Footer */
+			.site-header .site-search-link {
+				background: rgb(255 255 255 / 0.12);
+				box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.32);
+				color: #fff;
+			}
+
+			/* Footer: the home's deep footer, with the Pinies and the credits */
+			.site-footer .brand {
+				color: #fff;
+			}
+
+			.site-footer a:not(.brand) {
+				color: var(--color-on-deep);
+				text-decoration-line: underline;
+				text-decoration-color: rgb(255 255 255 / 0.3);
+				text-underline-offset: 3px;
+			}
+
+			.site-footer a:not(.brand):hover {
+				color: #fff;
+				text-decoration-color: currentColor;
+			}
+
+			.site-footer .eyebrow,
+			.site-footer__widgets :global(.widget__title) {
+				color: var(--color-accent);
+			}
+
 			.site-footer__grid {
 				display: grid;
 				grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
 				gap: var(--spacing-10);
-				padding-block: var(--spacing-16) var(--spacing-12);
+				padding-block: 56px var(--spacing-10);
 			}
 
 			.site-footer__tagline {
 				margin-top: var(--spacing-4);
-				max-width: 34ch;
-				font-size: var(--font-size-sm);
-				color: var(--color-text-secondary);
+				max-width: 30ch;
+				font-family: var(--font-serif);
+				font-size: var(--font-size-lg);
+				line-height: 1.4;
+				color: var(--color-on-deep);
 			}
 
 			.site-footer__col .eyebrow,
@@ -1310,17 +1404,13 @@ const year = new Date().getFullYear();
 				list-style: none;
 			}
 
-			.site-footer__links a {
+			.site-footer__links a:not(.brand) {
 				display: inline-flex;
 				align-items: center;
 				gap: var(--spacing-2);
-				font-size: var(--font-size-sm);
-				color: var(--color-text-secondary);
-				text-decoration: none;
-			}
-
-			.site-footer__links a:hover {
-				color: var(--color-text);
+				font-size: 15px;
+				font-weight: 600;
+				text-decoration-color: transparent;
 			}
 
 			.site-footer__links svg {
@@ -1334,24 +1424,57 @@ const year = new Date().getFullYear();
 			}
 
 			.site-footer__widgets :global(.widget__title) {
-				font-family: var(--font-mono);
-				font-size: var(--font-size-label);
-				font-weight: 500;
+				font-family: var(--font-heading);
+				font-size: var(--font-size-base);
+				font-weight: 800;
+				font-stretch: var(--font-stretch-heading);
 				letter-spacing: var(--tracking-wider);
+				line-height: var(--leading-snug);
 				text-transform: uppercase;
-				color: var(--color-muted);
 			}
 
 			.site-footer__widgets :global(.widget__content) {
-				font-size: var(--font-size-sm);
-				line-height: var(--leading-relaxed);
-				color: var(--color-text-secondary);
+				font-family: var(--font-serif);
+				font-size: var(--font-size-base);
+				line-height: 1.5;
+				color: var(--color-on-deep);
 			}
 
 			.site-footer__widgets :global(.widget__content ul) {
 				display: grid;
 				gap: var(--spacing-3);
 				list-style: none;
+			}
+
+			.site-footer__made {
+				display: grid;
+				grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+				align-items: end;
+				gap: 40px;
+				padding-block: var(--spacing-10);
+				border-top: 1px solid rgb(207 227 234 / 0.15);
+			}
+
+			.site-footer__pinies {
+				display: flex;
+				align-items: flex-end;
+				gap: 18px;
+			}
+
+			.site-footer__pinies p {
+				font-family: var(--font-serif);
+				font-size: var(--font-size-lg);
+				line-height: 1.4;
+			}
+
+			.site-footer__credits {
+				font-size: 13px;
+				line-height: 1.7;
+				opacity: 0.8;
+			}
+
+			.site-footer__bottom {
+				border-top: 1px solid rgb(207 227 234 / 0.15);
 			}
 
 			.site-footer__bottom-inner {
@@ -1365,11 +1488,8 @@ const year = new Date().getFullYear();
 
 			.site-footer__meta {
 				font-size: var(--font-size-xs);
-				color: var(--color-muted);
-			}
-
-			.site-footer__meta a {
-				color: var(--color-text-secondary);
+				color: var(--color-on-deep);
+				opacity: 0.8;
 			}
 
 			.theme-switcher {
@@ -1377,7 +1497,7 @@ const year = new Date().getFullYear();
 				gap: 2px;
 				padding: 3px;
 				border-radius: var(--radius-full);
-				background: var(--color-fill);
+				background: rgb(255 255 255 / 0.08);
 			}
 
 			.theme-btn {
@@ -1389,24 +1509,20 @@ const year = new Date().getFullYear();
 				border: 0;
 				border-radius: var(--radius-full);
 				background: transparent;
-				color: var(--color-muted);
+				color: rgb(207 227 234 / 0.7);
 				cursor: pointer;
 				transition:
 					color var(--transition-fast),
-					background-color var(--transition-fast),
-					box-shadow var(--transition-fast);
+					background-color var(--transition-fast);
 			}
 
 			.theme-btn:hover {
-				color: var(--color-text);
+				color: #fff;
 			}
 
 			.theme-btn.active {
-				background: var(--color-surface);
-				color: var(--color-text);
-				box-shadow:
-					0 0 0 1px var(--color-ring),
-					var(--shadow-sm);
+				background: var(--color-accent);
+				color: var(--color-on-accent);
 			}
 
 			.theme-btn svg {
@@ -1431,6 +1547,11 @@ const year = new Date().getFullYear();
 				.site-footer__brand {
 					grid-column: 1 / -1;
 				}
+
+				.site-footer__made {
+					grid-template-columns: minmax(0, 1fr);
+					gap: var(--spacing-6);
+				}
 			}
 
 			/* Phones: brand and actions on the first row, the nav on its own row */
@@ -1442,17 +1563,30 @@ const year = new Date().getFullYear();
 				.site-header__inner {
 					flex-wrap: wrap;
 					row-gap: var(--spacing-1);
+					min-height: 68px;
 					padding-block: var(--spacing-3) var(--spacing-2);
+				}
+
+				.brand {
+					font-size: 24px;
+				}
+
+				.brand__mark {
+					width: 24px;
+					height: 24px;
 				}
 
 				.site-nav {
 					order: 3;
 					flex-basis: 100%;
-					margin-inline-start: -10px;
+				}
+
+				.site-nav ul {
+					column-gap: 20px;
 				}
 
 				.site-nav a {
-					padding: 8px 10px;
+					padding-block: 8px;
 				}
 
 				.site-search {
@@ -1463,6 +1597,11 @@ const year = new Date().getFullYear();
 					display: inline-grid;
 					width: 2.5rem;
 					height: 2.5rem;
+				}
+
+				.site-footer__pinies {
+					flex-direction: column;
+					align-items: flex-start;
 				}
 			}
 

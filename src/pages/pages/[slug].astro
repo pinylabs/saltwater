@@ -64,8 +64,8 @@ const seo = getSeoMeta(page, {
 	}
 
 	.page__title {
-		font-size: var(--font-size-display);
-		line-height: 1.05;
+		font-size: clamp(3rem, 1.5rem + 4vw, 5.5rem);
+		line-height: var(--leading-tight);
 		max-width: 22ch;
 	}
 

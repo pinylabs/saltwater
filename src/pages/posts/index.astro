@@ -43,7 +43,7 @@ const postsWithTags = posts.map((post) => ({
 		</div>
 	</header>
 
-	<section class="band section archive-band">
+	<section class="band section">
 		<div class="frame">
 			{
 				posts.length === 0 ? (
@@ -66,13 +66,15 @@ const postsWithTags = posts.map((post) => ({
 					</div>
 				) : (
 					<>
-						<ol class="archive__list">
-							{postsWithTags.map(({ post, tags }) => (
-								<li>
-									<PostCard post={post} tags={tags} variant="row" />
-								</li>
+						<div class="post-grid post-mosaic">
+							{postsWithTags.map(({ post, tags }, index) => (
+								<PostCard
+									post={post}
+									tags={tags}
+									priority={index === 0 && !cursor}
+								/>
 							))}
-						</ol>
+						</div>
 						<Pagination
 							basePath="/posts"
 							cursor={cursor}
@@ -84,18 +86,3 @@ const postsWithTags = posts.map((post) => ({
 		</div>
 	</section>
 </Base>
-
-<style>
-	/* The band's rule doubles as the first row divider */
-	.archive-band {
-		padding-block-start: 0;
-	}
-
-	.archive__list {
-		list-style: none;
-	}
-
-	.archive__list > li + li {
-		border-block-start: 1px solid var(--color-border);
-	}
-</style>
