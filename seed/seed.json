@@ -2,13 +2,13 @@
 	"$schema": "https://emdashcms.com/seed.schema.json",
 	"version": "1",
 	"meta": {
-		"name": "Blog Starter",
-		"description": "A blog with posts and pages",
-		"author": "EmDash"
+		"name": "Saltwater",
+		"description": "Sydney's coastal walks: a photo-led publication of walks, written up with where to swim at the end",
+		"author": "Piny"
 	},
 	"settings": {
-		"title": "My Blog",
-		"tagline": "Thoughts on building for the web"
+		"title": "Saltwater",
+		"tagline": "Sydney's coastal walks"
 	},
 	"collections": [
 		{
@@ -16,7 +16,14 @@
 			"label": "Posts",
 			"labelSingular": "Post",
 			"urlPattern": "/posts/{slug}",
-			"supports": ["drafts", "revisions", "preview", "scheduling", "search", "seo"],
+			"supports": [
+				"drafts",
+				"revisions",
+				"preview",
+				"scheduling",
+				"search",
+				"seo"
+			],
 			"commentsEnabled": true,
 			"fields": [
 				{
@@ -49,7 +56,13 @@
 			"label": "Pages",
 			"labelSingular": "Page",
 			"urlPattern": "/pages/{slug}",
-			"supports": ["drafts", "revisions", "preview", "search", "seo"],
+			"supports": [
+				"drafts",
+				"revisions",
+				"preview",
+				"search",
+				"seo"
+			],
 			"fields": [
 				{
 					"slug": "title",
@@ -73,19 +86,17 @@
 			"label": "Categories",
 			"labelSingular": "Category",
 			"hierarchical": true,
-			"collections": ["posts"],
+			"collections": [
+				"posts"
+			],
 			"terms": [
 				{
-					"slug": "development",
-					"label": "Development"
+					"slug": "walks",
+					"label": "Walks"
 				},
 				{
-					"slug": "design",
-					"label": "Design"
-				},
-				{
-					"slug": "notes",
-					"label": "Notes"
+					"slug": "field-log",
+					"label": "Field log"
 				}
 			]
 		},
@@ -94,38 +105,54 @@
 			"label": "Tags",
 			"labelSingular": "Tag",
 			"hierarchical": false,
-			"collections": ["posts"],
+			"collections": [
+				"posts"
+			],
 			"terms": [
 				{
-					"slug": "webdev",
-					"label": "Web Development"
+					"slug": "eastern-beaches",
+					"label": "Eastern beaches"
 				},
 				{
-					"slug": "opinion",
-					"label": "Opinion"
+					"slug": "harbour",
+					"label": "Harbour"
 				},
 				{
-					"slug": "tools",
-					"label": "Tools"
+					"slug": "royal-national-park",
+					"label": "Royal National Park"
 				},
 				{
-					"slug": "creativity",
-					"label": "Creativity"
+					"slug": "ocean-pools",
+					"label": "Ocean pools"
+				},
+				{
+					"slug": "lighthouses",
+					"label": "Lighthouses"
+				},
+				{
+					"slug": "stairs",
+					"label": "Stairs"
+				},
+				{
+					"slug": "bus-back",
+					"label": "Bus back"
+				},
+				{
+					"slug": "ferry-back",
+					"label": "Ferry back"
+				},
+				{
+					"slug": "overnight",
+					"label": "Overnight"
 				}
 			]
 		}
 	],
 	"bylines": [
 		{
-			"id": "byline-editorial",
-			"slug": "emdash-editorial",
-			"displayName": "EmDash Editorial"
-		},
-		{
-			"id": "byline-guest",
-			"slug": "guest-contributor",
-			"displayName": "Guest Contributor",
-			"isGuest": true
+			"id": "byline-saltwater",
+			"slug": "saltwater",
+			"displayName": "The Saltwater walkers"
 		}
 	],
 	"menus": [
@@ -135,8 +162,13 @@
 			"items": [
 				{
 					"type": "custom",
-					"label": "Home",
-					"url": "/"
+					"label": "Walks",
+					"url": "/category/walks"
+				},
+				{
+					"type": "custom",
+					"label": "Tides & safety",
+					"url": "/pages/tides-and-safety"
 				},
 				{
 					"type": "custom",
@@ -145,8 +177,8 @@
 				},
 				{
 					"type": "custom",
-					"label": "Posts",
-					"url": "/posts"
+					"label": "Field log",
+					"url": "/category/field-log"
 				}
 			]
 		}
@@ -207,7 +239,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "A blog about software, design, and the occasional stray thought.",
+									"text": "Coastal walks from Bondi to the Royal National Park: walked, timed and written up, with where to swim at the end. Updated each season.",
 									"_key": "k1"
 								}
 							],
@@ -220,19 +252,24 @@
 	],
 	"sections": [
 		{
-			"slug": "newsletter-signup",
-			"title": "Newsletter Signup",
-			"description": "A call-to-action block for newsletter subscriptions",
-			"keywords": ["newsletter", "subscribe", "email", "cta"],
+			"slug": "before-you-head-out",
+			"title": "Before you head out",
+			"description": "The short safety note that opens each walk",
+			"keywords": [
+				"safety",
+				"swell",
+				"heat",
+				"water"
+			],
 			"source": "theme",
 			"content": [
 				{
 					"_type": "block",
-					"style": "h3",
+					"style": "h2",
 					"children": [
 						{
 							"_type": "span",
-							"text": "Stay in the loop",
+							"text": "Before you head out",
 							"_key": "k1"
 						}
 					],
@@ -244,7 +281,7 @@
 					"children": [
 						{
 							"_type": "span",
-							"text": "Get notified when new posts are published. No spam, unsubscribe anytime.",
+							"text": "Over two metres of swell, rock pools and low ledges close. Most of the walk has no shade: go early and carry two litres of water.",
 							"_key": "k3"
 						}
 					],
@@ -253,23 +290,40 @@
 			]
 		},
 		{
-			"slug": "about-author",
-			"title": "About the Author",
-			"description": "Brief author bio for use in posts or pages",
-			"keywords": ["author", "bio", "about"],
+			"slug": "the-way-back",
+			"title": "The way back",
+			"description": "Where the walk ends and how to get home",
+			"keywords": [
+				"bus",
+				"ferry",
+				"return",
+				"transport"
+			],
 			"source": "theme",
 			"content": [
+				{
+					"_type": "block",
+					"style": "h2",
+					"children": [
+						{
+							"_type": "span",
+							"text": "The way back",
+							"_key": "k1"
+						}
+					],
+					"_key": "k0"
+				},
 				{
 					"_type": "block",
 					"style": "normal",
 					"children": [
 						{
 							"_type": "span",
-							"text": "A software developer who writes about building things on the web. Based somewhere with good coffee and reliable internet.",
-							"_key": "k1"
+							"text": "Name the bus stop or ferry wharf where the walk ends, and check the timetable on the day before you set off.",
+							"_key": "k3"
 						}
 					],
-					"_key": "k0"
+					"_key": "k2"
 				}
 			]
 		}
@@ -289,7 +343,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "A place for writing about software, design, and the occasional stray thought. No posting schedule, no newsletter funnel. Just things I wanted to write down.",
+									"text": "Saltwater is a guide to Sydney's coastal walks, from Bondi to the Royal National Park. Each walk is walked, timed and written up, with where to swim at the end, and updated each season.",
 									"_key": "k1"
 								}
 							],
@@ -297,15 +351,193 @@
 						},
 						{
 							"_type": "block",
-							"style": "normal",
+							"style": "h2",
 							"children": [
 								{
 									"_type": "span",
-									"text": "Built with Astro and EmDash. The source is open if you want to see how it works.",
+									"text": "How we write a walk",
 									"_key": "k3"
 								}
 							],
 							"_key": "k2"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Every walk opens with its distance, how long it took us and how you get home. The times are ours, walking steadily with stops for photos; add time for swims and for the stairs. Each walk shows when we last walked it and what had changed since.",
+									"_key": "k5"
+								}
+							],
+							"_key": "k4"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "What we do not check",
+									"_key": "k7"
+								}
+							],
+							"_key": "k6"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Tracks close after storms, in fire weather and for repairs, and pools are drained for cleaning. Check NSW National Parks and the local council for closures before you go.",
+									"_key": "k9"
+								}
+							],
+							"_key": "k8"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Credits",
+									"_key": "k11"
+								}
+							],
+							"_key": "k10"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Made by the Pinies in Piny, on EmDash. Walked and checked by people. Photos on Unsplash and the video on Pexels, by Dominic Kurniawan Suryaputra, Gary Runn, Matt Str, Steven Zhang, Kelvin Li, Colton Jones, Jack Bass and Edan Kwon.",
+									"_key": "k13"
+								}
+							],
+							"_key": "k12"
+						}
+					]
+				}
+			},
+			{
+				"id": "tides-and-safety",
+				"slug": "tides-and-safety",
+				"status": "published",
+				"data": {
+					"title": "Tides & safety",
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Sydney's coast is easy walking on a calm day and a different place in a big swell or a heatwave. Read this before you head out.",
+									"_key": "k1"
+								}
+							],
+							"_key": "k0"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "The swell",
+									"_key": "k3"
+								}
+							],
+							"_key": "k2"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Over two metres, rock pools and low ledges close. We say so at the top of each walk. Waves on this coast come in sets, and a quiet ledge can be washed over without warning.",
+									"_key": "k5"
+								}
+							],
+							"_key": "k4"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "The heat",
+									"_key": "k7"
+								}
+							],
+							"_key": "k6"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Most of these walks have no shade. Go early, carry two litres, and wear a hat.",
+									"_key": "k9"
+								}
+							],
+							"_key": "k8"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "The way back",
+									"_key": "k11"
+								}
+							],
+							"_key": "k10"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Every walk ends at a bus stop or a ferry wharf, and we name it. Check the timetable before you set off.",
+									"_key": "k13"
+								}
+							],
+							"_key": "k12"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Updated",
+									"_key": "k15"
+								}
+							],
+							"_key": "k14"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Each walk shows when we last walked it and what had changed. Conditions change faster than we can walk them, so check the park and council alerts on the day.",
+									"_key": "k17"
+								}
+							],
+							"_key": "k16"
 						}
 					]
 				}
@@ -313,17 +545,17 @@
 		],
 		"posts": [
 			{
-				"id": "post-1",
-				"slug": "building-for-the-long-term",
+				"id": "walk-bondi-to-coogee",
+				"slug": "bondi-to-coogee",
 				"status": "published",
 				"data": {
-					"title": "Building for the Long Term",
-					"excerpt": "The frameworks will change. The databases will change. What survives is the clarity of your thinking.",
+					"title": "Bondi to Coogee",
+					"excerpt": "Sydney's best-loved walk: six kilometres of headlands, ocean pools and beaches, with a swim at either end.",
 					"featured_image": {
 						"$media": {
-							"url": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&h=800&fit=crop",
-							"alt": "Code on a monitor in a dark room",
-							"filename": "building-long-term.jpg"
+							"url": "https://images.unsplash.com/photo-1721047178643-f3173c92cd6d?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "A walker on the sandstone cliffs south of Bondi",
+							"filename": "bondi-to-coogee.jpg"
 						}
 					},
 					"content": [
@@ -333,7 +565,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Every few years the industry collectively decides that everything we've been doing is wrong and there's a better way. New frameworks, new paradigms, new build tools. The churn is relentless, and if you're not careful, you spend more time migrating than building.",
+									"text": "6 km · 2–3 hours · Easy, with stairs · Bus back from Coogee.",
 									"_key": "k1"
 								}
 							],
@@ -345,7 +577,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "I've been writing software long enough to have seen several of these cycles. jQuery to Backbone to Angular to React to whatever comes next. Each transition felt urgent at the time. Looking back, the things that actually mattered were rarely about the framework.",
+									"text": "If you only walk one stretch of Sydney's coast, make it this one. The path leaves the south end of Bondi Beach beside the Icebergs pool and keeps to the cliff edge, dropping into a beach or a cove every kilometre or so before it climbs out again.",
 									"_key": "k3"
 								}
 							],
@@ -357,7 +589,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "What survives",
+									"text": "The route",
 									"_key": "k5"
 								}
 							],
@@ -369,7 +601,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Clean data models survive. Clear boundaries between systems survive. Good naming survives. The decision to keep things simple when you could have made them clever - that definitely survives.",
+									"text": "From Bondi the path rounds Mackenzies Point to Tamarama, a small, steep beach known for strong rips. Bronte comes next, with its park, its rock baths and a line of cafés behind the sand. Past Bronte the path runs beside Waverley Cemetery, high above the water, before it comes down to Clovelly, a long narrow inlet that is calm on most days.",
 									"_key": "k7"
 								}
 							],
@@ -381,7 +613,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "What doesn't survive is code that was written to impress, abstractions built for problems that never materialized, and architectures designed around a framework's opinions rather than the domain's reality.",
+									"text": "After Clovelly the path goes around Gordons Bay, where the water is clear enough for snorkelling on a flat day, and then along the last headland into Coogee. The walk is short, but the stairs add up: count on climbing out of every beach.",
 									"_key": "k9"
 								}
 							],
@@ -389,44 +621,107 @@
 						},
 						{
 							"_type": "block",
-							"style": "normal",
+							"style": "h2",
 							"children": [
 								{
 									"_type": "span",
-									"text": "The best code I've written is boring. It reads like prose, does one thing well, and doesn't require a PhD in category theory to understand. The worst code I've written was technically impressive at the time.",
+									"text": "Where to swim",
 									"_key": "k11"
 								}
 							],
 							"_key": "k10"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "There are ocean pools along the way and a beach at each end. Bondi Icebergs at the start charges entry; Bronte's rock baths are free. Swim between the flags on the beaches, and treat the pools as closed when waves are washing over their walls.",
+									"_key": "k13"
+								}
+							],
+							"_key": "k12"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "The way back",
+									"_key": "k15"
+								}
+							],
+							"_key": "k14"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Buses run from Coogee back towards Bondi Junction and the city. Check the stop and the timetable before you set off, because the walk takes longer than it looks once you stop to swim.",
+									"_key": "k17"
+								}
+							],
+							"_key": "k16"
+						},
+						{
+							"_type": "block",
+							"style": "blockquote",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Start early, swim at the end, and the bus home feels like a reward.",
+									"_key": "k19"
+								}
+							],
+							"_key": "k18"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Last walked this spring: the Tamarama stairs were open, and Bronte pool was drained for cleaning.",
+									"_key": "k21"
+								}
+							],
+							"_key": "k20"
 						}
 					]
 				},
 				"bylines": [
 					{
-						"byline": "byline-editorial"
-					},
-					{
-						"byline": "byline-guest",
-						"roleLabel": "Guest essay"
+						"byline": "byline-saltwater"
 					}
 				],
 				"taxonomies": {
-					"category": ["development"],
-					"tag": ["opinion"]
+					"category": [
+						"walks"
+					],
+					"tag": [
+						"eastern-beaches",
+						"ocean-pools",
+						"stairs",
+						"bus-back"
+					]
 				}
 			},
 			{
-				"id": "post-2",
-				"slug": "the-case-for-static",
+				"id": "walk-spit-to-manly",
+				"slug": "spit-to-manly",
 				"status": "published",
 				"data": {
-					"title": "The Case for Static",
-					"excerpt": "Static sites aren't a step backwards. They're what you get when you take performance and simplicity seriously.",
+					"title": "Spit to Manly",
+					"excerpt": "Ten kilometres of harbour bush, small beaches and sandstone headlands, from the Spit Bridge to the Manly ferry.",
 					"featured_image": {
 						"$media": {
-							"url": "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=800&fit=crop",
-							"alt": "Laptop and coffee on a wooden table",
-							"filename": "case-for-static.jpg"
+							"url": "https://images.unsplash.com/photo-1572811224088-af9bd40898af?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "Sandstone cliffs at North Head, Manly",
+							"filename": "spit-to-manly.jpg"
 						}
 					},
 					"content": [
@@ -436,7 +731,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "There's a certain irony in the fact that the web started static, went dynamic, and is now swinging back toward static again. But the static sites of today aren't the hand-coded HTML pages of 1998. They're generated, optimized, and deployed to edge networks that serve them in milliseconds.",
+									"text": "10 km · 3–4 hours · Moderate · Ferry back from Manly.",
 									"_key": "k1"
 								}
 							],
@@ -448,7 +743,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The pitch for server-rendered everything was compelling: dynamic content, personalization, real-time data. But most sites don't need most of that most of the time. A blog post doesn't need to be rendered on every request. A product page doesn't change every second.",
+									"text": "This is the harbour's long walk, and it feels much further from the city than it is. The track starts at the northern end of the Spit Bridge and follows the shore of Middle Harbour all the way to Manly Cove, mostly through bush, with sandy beaches and rock shelves in between.",
 									"_key": "k3"
 								}
 							],
@@ -460,7 +755,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The performance argument",
+									"text": "The route",
 									"_key": "k5"
 								}
 							],
@@ -472,7 +767,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "A static file served from a CDN is as fast as the web gets. No cold starts, no database queries, no server-side rendering overhead. The Time to First Byte is essentially the network latency to your nearest edge node. You can't beat physics.",
+									"text": "The first stretch runs past Clontarf, a family beach with a netted swimming area. The track then climbs onto the headlands, where there are rough sections over sandstone and roots, and stairs in both directions. Grotto Point has a small lighthouse and, nearby, Aboriginal rock engravings; stay on the boardwalk and leave them as you find them.",
 									"_key": "k7"
 								}
 							],
@@ -484,36 +779,90 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "And when you do need dynamic behavior, you can add it surgically. An island of interactivity in a sea of static HTML. The best of both worlds, without paying the cost of either at all times.",
+									"text": "From Dobroyd Head you look across the harbour mouth to North Head, the cliffs in the photograph. The track then drops past Reef Beach, Forty Baskets and Fairlight, and the last kilometre into Manly is an easy path along the water.",
 									"_key": "k9"
 								}
 							],
 							"_key": "k8"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Where to swim",
+									"_key": "k11"
+								}
+							],
+							"_key": "k10"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Clontarf and Forty Baskets are both sheltered; Forty Baskets has a small tidal pool. The water at Manly Cove is calm, and the ocean beach is a short walk across the Corso if you want waves.",
+									"_key": "k13"
+								}
+							],
+							"_key": "k12"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "The way back",
+									"_key": "k15"
+								}
+							],
+							"_key": "k14"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Ferries run from Manly Wharf to Circular Quay. Sit outside on the way back: the ride across the harbour is the walk seen from the water.",
+									"_key": "k17"
+								}
+							],
+							"_key": "k16"
 						}
 					]
 				},
 				"bylines": [
 					{
-						"byline": "byline-editorial"
+						"byline": "byline-saltwater"
 					}
 				],
 				"taxonomies": {
-					"category": ["development"],
-					"tag": ["webdev", "opinion"]
+					"category": [
+						"walks"
+					],
+					"tag": [
+						"harbour",
+						"lighthouses",
+						"ferry-back"
+					]
 				}
 			},
 			{
-				"id": "post-3",
-				"slug": "learning-in-public",
+				"id": "walk-south-head",
+				"slug": "south-head",
 				"status": "published",
 				"data": {
-					"title": "Learning in Public",
-					"excerpt": "Writing about what you're learning is the fastest way to find out what you don't actually understand.",
+					"title": "South Head",
+					"excerpt": "A short loop from Watsons Bay to Hornby Lighthouse, the red and white tower at the harbour's southern gate.",
 					"featured_image": {
 						"$media": {
-							"url": "https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&h=800&fit=crop",
-							"alt": "Notebook and pen on a desk",
-							"filename": "learning-in-public.jpg"
+							"url": "https://images.unsplash.com/photo-1623322909259-14306fa63303?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "Hornby Lighthouse on South Head",
+							"filename": "south-head.jpg"
 						}
 					},
 					"content": [
@@ -523,7 +872,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "I started writing about things I was learning not because I had anything original to say, but because I kept forgetting what I'd figured out. The blog posts were notes to my future self, published publicly more out of laziness than courage.",
+									"text": "1.5 km loop · 45 minutes · Easy.",
 									"_key": "k1"
 								}
 							],
@@ -535,7 +884,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "What I didn't expect was how much the writing itself would accelerate the learning. There's a particular kind of clarity that comes from trying to explain something to someone else. The gaps in your understanding, which you can happily ignore when the knowledge lives only in your head, become painfully obvious when you try to put it into sentences.",
+									"text": "South Head is the shortest walk here and one of the best for a first visit. The loop starts near Camp Cove, a few minutes' walk from the Watsons Bay ferry wharf, and follows a mostly flat track out to the point.",
 									"_key": "k3"
 								}
 							],
@@ -547,7 +896,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The fear of being wrong",
+									"text": "The route",
 									"_key": "k5"
 								}
 							],
@@ -559,7 +908,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The biggest barrier isn't time or writing skill. It's the fear of publishing something that turns out to be wrong. But here's the thing: being wrong publicly is one of the most efficient ways to learn. Someone will correct you, often kindly, and you'll remember that correction forever.",
+									"text": "The path passes Lady Bay and the old gun emplacements that once guarded the harbour, then reaches Hornby Lighthouse, painted in red and white stripes so ships could see it by day. From the point you look straight across to North Head, with the open ocean on one side and the harbour on the other.",
 									"_key": "k7"
 								}
 							],
@@ -571,31 +920,89 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The posts that helped me most weren't written by experts. They were written by people one step ahead of me on the same path, in language that hadn't yet been polished into abstraction. There's a place for that kind of writing, and it's more valuable than most people realize.",
+									"text": "The track has had repairs; our new photos are from the walk after they were finished. Some sections are close to the cliff edge, so keep children close.",
 									"_key": "k9"
 								}
 							],
 							"_key": "k8"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Where to swim",
+									"_key": "k11"
+								}
+							],
+							"_key": "k10"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Camp Cove is a small, calm harbour beach at the start of the loop. Watsons Bay has a harbour pool and fish and chips by the water.",
+									"_key": "k13"
+								}
+							],
+							"_key": "k12"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "The way back",
+									"_key": "k15"
+								}
+							],
+							"_key": "k14"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Ferries run from Watsons Bay to Circular Quay, and buses go back to the city.",
+									"_key": "k17"
+								}
+							],
+							"_key": "k16"
 						}
 					]
 				},
+				"bylines": [
+					{
+						"byline": "byline-saltwater"
+					}
+				],
 				"taxonomies": {
-					"category": ["notes"],
-					"tag": ["opinion"]
+					"category": [
+						"walks"
+					],
+					"tag": [
+						"harbour",
+						"lighthouses"
+					]
 				}
 			},
 			{
-				"id": "post-4",
-				"slug": "small-tools-big-impact",
+				"id": "walk-the-coast-track",
+				"slug": "the-coast-track",
 				"status": "published",
 				"data": {
-					"title": "Small Tools, Big Impact",
-					"excerpt": "The best developer tools do one thing well and get out of your way. A love letter to focused software.",
+					"title": "The Coast Track",
+					"excerpt": "Bundeena to Otford through the Royal National Park, past Wedding Cake Rock, seen from the track.",
 					"featured_image": {
 						"$media": {
-							"url": "https://images.unsplash.com/photo-1575026615908-666710ae5e47?w=1200&h=800&fit=crop",
-							"alt": "Wrenches and hand tools hanging on a workshop wall",
-							"filename": "small-tools.jpg"
+							"url": "https://images.unsplash.com/photo-1784513435638-7325d4caef42?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "Wedding Cake Rock above the ocean in the Royal National Park",
+							"filename": "the-coast-track.jpg"
 						}
 					},
 					"content": [
@@ -605,7 +1012,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "There's a class of software that doesn't get enough appreciation. Not the frameworks or the platforms or the IDEs, but the small, sharp tools that solve one problem so well you stop thinking about them. They become invisible, which is the highest compliment you can pay a tool.",
+									"text": "26 km · 2 days · Hard · Booking needed for the campground.",
 									"_key": "k1"
 								}
 							],
@@ -617,7 +1024,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "I'm talking about things like ripgrep, which searches code so fast it changed how I think about searching. Or jq, which makes JSON feel like a first-class data format in the terminal. Or curl, which has been quietly powering the internet's plumbing for decades.",
+									"text": "The Coast Track runs the length of the Royal National Park, from Bundeena in the north to Otford in the south. It is the longest walk on this site, and the only one we split over two days.",
 									"_key": "k3"
 								}
 							],
@@ -629,7 +1036,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The Unix philosophy, revisited",
+									"text": "Day one",
 									"_key": "k5"
 								}
 							],
@@ -641,7 +1048,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Do one thing well. The advice is old enough to be a cliche, but the best modern tools still follow it. They don't try to be platforms. They don't have plugin ecosystems or configuration languages or startup wizards. They do their job and they compose with other tools that do theirs.",
+									"text": "From Bundeena the track crosses open heath along the cliff tops. Wedding Cake Rock, the white sandstone ledge in the photograph, is fenced off because it is unstable: look at it from the track and do not climb the fence. The track then reaches Wattamolla, a lagoon and beach that make a good lunch stop, and continues past Eagle Rock and the falls at Curracurrong to Garie Beach.",
 									"_key": "k7"
 								}
 							],
@@ -649,35 +1056,105 @@
 						},
 						{
 							"_type": "block",
-							"style": "normal",
+							"style": "h2",
 							"children": [
 								{
 									"_type": "span",
-									"text": "The temptation is always to add more. One more feature, one more option, one more integration. But every addition is a decision someone has to make, a path through the code that has to be maintained, a thing that can break. The best tools resist this. They stay small, and in staying small, they stay reliable.",
+									"text": "Day two",
 									"_key": "k9"
 								}
 							],
 							"_key": "k8"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "South of Garie the track passes the beaches of North and South Era and Burning Palms, then climbs into rainforest before the final stretch to Otford. The rock platforms along this section, including the Figure Eight Pools, are dangerous in any swell and can be cut off by the tide; we do not route the walk through them.",
+									"_key": "k11"
+								}
+							],
+							"_key": "k10"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Planning",
+									"_key": "k13"
+								}
+							],
+							"_key": "k12"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Camping in the park is booked through NSW National Parks, and the campground at North Era is the usual halfway stop. Carry all your water for the first day, a stove and a map. Check the park's alerts before you go, because sections of the track close after storms and in fire weather.",
+									"_key": "k15"
+								}
+							],
+							"_key": "k14"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Getting there and back",
+									"_key": "k17"
+								}
+							],
+							"_key": "k16"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Bundeena is reached by ferry from Cronulla. Otford has a train station on the South Coast line, a short and steep climb down from the end of the track.",
+									"_key": "k19"
+								}
+							],
+							"_key": "k18"
 						}
 					]
 				},
+				"bylines": [
+					{
+						"byline": "byline-saltwater"
+					}
+				],
 				"taxonomies": {
-					"category": ["development"],
-					"tag": ["tools"]
+					"category": [
+						"walks"
+					],
+					"tag": [
+						"royal-national-park",
+						"overnight"
+					]
 				}
 			},
 			{
-				"id": "post-5",
-				"slug": "designing-with-constraints",
+				"id": "walk-bondi-to-watsons-bay",
+				"slug": "bondi-to-watsons-bay",
 				"status": "published",
 				"data": {
-					"title": "Designing with Constraints",
-					"excerpt": "Limitations aren't obstacles to creativity. They're the structure that makes creativity possible.",
+					"title": "Bondi to Watsons Bay",
+					"excerpt": "North from Bondi along the cliff tops, past Diamond Bay, to fish and chips by the harbour.",
 					"featured_image": {
 						"$media": {
-							"url": "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=1200&h=800&fit=crop",
-							"alt": "Pencils and design tools on a desk",
-							"filename": "designing-with-constraints.jpg"
+							"url": "https://images.unsplash.com/photo-1553510102-c8aeb4db678f?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "Turquoise water below the cliffs at Diamond Bay",
+							"filename": "bondi-to-watsons-bay.jpg"
 						}
 					},
 					"content": [
@@ -687,7 +1164,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Give a designer a blank canvas and unlimited time, and they'll often produce something mediocre. Give them a tight brief, a small screen, and a deadline, and they'll surprise you. This isn't a paradox - it's how creativity actually works.",
+									"text": "6.5 km · 2.5 hours · Easy, with stairs · Ferry back from Watsons Bay.",
 									"_key": "k1"
 								}
 							],
@@ -699,7 +1176,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Constraints force decisions. When you can't use more than two typefaces, you have to choose carefully. When the page has to load in under a second, every element earns its place. When the interface has to work on a 320px screen, you discover what's truly essential.",
+									"text": "This is the quieter half of the eastern beaches walk. It leaves the north end of Bondi Beach and follows the cliffs north to the harbour, ending at Watsons Bay instead of another beach.",
 									"_key": "k3"
 								}
 							],
@@ -711,7 +1188,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Embracing the box",
+									"text": "The route",
 									"_key": "k5"
 								}
 							],
@@ -723,7 +1200,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The web itself is a constraint. HTML flows in one direction. CSS has a box model. Browsers have viewport sizes and font rendering quirks. You can fight these constraints or you can work with them, and the results are dramatically different.",
+									"text": "From North Bondi the path climbs over Ben Buckler and through the streets and reserves of Dover Heights, where some stretches are footpath rather than track. At Diamond Bay a walkway runs along the cliff top above deep, clear water. Further on, the path passes Macquarie Lighthouse and then follows the cliffs of The Gap down into Watsons Bay.",
 									"_key": "k7"
 								}
 							],
@@ -731,35 +1208,108 @@
 						},
 						{
 							"_type": "block",
-							"style": "normal",
+							"style": "h2",
 							"children": [
 								{
 									"_type": "span",
-									"text": "The designs I admire most don't look like they were forced through a framework. They look like they grew naturally from the medium, respecting its grain rather than working against it. That only happens when you treat constraints as creative partners rather than enemies.",
+									"text": "Shade",
 									"_key": "k9"
 								}
 							],
 							"_key": "k8"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "There is almost none. The cliff tops are open to the sun and the wind, and the only cover is in the reserves between them. Start early on a warm day and carry two litres of water.",
+									"_key": "k11"
+								}
+							],
+							"_key": "k10"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Where to swim",
+									"_key": "k13"
+								}
+							],
+							"_key": "k12"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Swim at Bondi before you start or at the harbour end: Watsons Bay has a netted harbour pool, and Camp Cove is a short walk away. The cliffs in between have no safe way down to the water.",
+									"_key": "k15"
+								}
+							],
+							"_key": "k14"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "The way back",
+									"_key": "k17"
+								}
+							],
+							"_key": "k16"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Ferries run from Watsons Bay to Circular Quay; check the times before you set off, as they are less frequent in the evening. Buses also run back to the city.",
+									"_key": "k19"
+								}
+							],
+							"_key": "k18"
 						}
 					]
 				},
+				"bylines": [
+					{
+						"byline": "byline-saltwater"
+					}
+				],
 				"taxonomies": {
-					"category": ["design"],
-					"tag": ["creativity"]
+					"category": [
+						"walks"
+					],
+					"tag": [
+						"eastern-beaches",
+						"harbour",
+						"lighthouses",
+						"stairs",
+						"ferry-back"
+					]
 				}
 			},
 			{
-				"id": "post-6",
-				"slug": "a-weekend-with-a-side-project",
+				"id": "log-spring",
+				"slug": "field-log-spring",
 				"status": "published",
 				"data": {
-					"title": "A Weekend with a Side Project",
-					"excerpt": "No stakeholders, no deadlines, no Jira tickets. Just you and a dumb idea that might turn into something.",
+					"title": "Field log: spring",
+					"excerpt": "Bondi to Coogee walked again, ferry times back from Watsons Bay, and new photos of South Head.",
 					"featured_image": {
 						"$media": {
-							"url": "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=1200&h=800&fit=crop",
-							"alt": "Code on a screen with a dark theme",
-							"filename": "weekend-side-project.jpg"
+							"url": "https://images.unsplash.com/photo-1584868138762-fcae9e7d55b2?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "Bondi Icebergs pool from above, waves breaking over its wall",
+							"filename": "field-log-spring.jpg"
 						}
 					},
 					"content": [
@@ -769,7 +1319,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Saturday morning. Coffee's made, the house is quiet, and I've got an idea that's been nagging at me all week. Not a good idea, necessarily - just a persistent one. A small tool that does a thing I keep doing manually. How hard could it be?",
+									"text": "Each walk on this site shows when we last walked it and what had changed. This log collects those changes in one place.",
 									"_key": "k1"
 								}
 							],
@@ -777,11 +1327,11 @@
 						},
 						{
 							"_type": "block",
-							"style": "normal",
+							"style": "h2",
 							"children": [
 								{
 									"_type": "span",
-									"text": "This is the best kind of programming. No requirements document, no sprint planning, no pull request reviews. Just a text editor and a problem. The freedom to make terrible architectural decisions, rewrite everything twice, and follow tangents that turn out to be dead ends.",
+									"text": "This week",
 									"_key": "k3"
 								}
 							],
@@ -789,11 +1339,11 @@
 						},
 						{
 							"_type": "block",
-							"style": "h2",
+							"style": "normal",
 							"children": [
 								{
 									"_type": "span",
-									"text": "Why side projects matter",
+									"text": "Walked Bondi to Coogee again: the Tamarama stairs are open, Bronte pool was drained for cleaning.",
 									"_key": "k5"
 								}
 							],
@@ -801,11 +1351,11 @@
 						},
 						{
 							"_type": "block",
-							"style": "normal",
+							"style": "h2",
 							"children": [
 								{
 									"_type": "span",
-									"text": "Side projects are where you learn things your day job would never teach you. Not because the problems are harder, but because you're free to take risks. Try a language you've never used. Build something without a framework. Deploy to a platform you've only read about. The stakes are zero, which makes the learning maximum.",
+									"text": "Last week",
 									"_key": "k7"
 								}
 							],
@@ -817,57 +1367,11 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "By Sunday evening, the thing sort of works. It's rough, the error handling is nonexistent, and the README is a single sentence. But it solves the problem I set out to solve, and I learned three things I didn't know on Friday. Not a bad weekend.",
+									"text": "Added the ferry times back from Watsons Bay, and a note on shade.",
 									"_key": "k9"
 								}
 							],
 							"_key": "k8"
-						}
-					]
-				},
-				"taxonomies": {
-					"category": ["development"],
-					"tag": ["creativity"]
-				}
-			},
-			{
-				"id": "post-7",
-				"slug": "notes-on-simplicity",
-				"status": "published",
-				"data": {
-					"title": "Notes on Simplicity",
-					"excerpt": "Simplicity isn't the absence of complexity. It's the result of understanding a problem well enough to solve it cleanly.",
-					"featured_image": {
-						"$media": {
-							"url": "https://images.unsplash.com/photo-1559051668-e1fa58f25786?w=1200&h=800&fit=crop",
-							"alt": "Geometric pattern carved into white paper",
-							"filename": "notes-on-simplicity.jpg"
-						}
-					},
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Every piece of software starts simple. A few files, a clear purpose, a small surface area. Then features get added, edge cases get handled, and before long you're looking at something that requires a diagram to understand. This isn't inevitable, but it takes discipline to prevent.",
-									"_key": "k1"
-								}
-							],
-							"_key": "k0"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The hard part of simplicity isn't the initial design. It's the ongoing resistance to complication. Every feature request, every bug fix, every refactor is an opportunity to add complexity. Saying no is the most important design skill, and the least celebrated.",
-									"_key": "k3"
-								}
-							],
-							"_key": "k2"
 						},
 						{
 							"_type": "block",
@@ -875,11 +1379,11 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Removing as a feature",
-									"_key": "k5"
+									"text": "Spring",
+									"_key": "k11"
 								}
 							],
-							"_key": "k4"
+							"_key": "k10"
 						},
 						{
 							"_type": "block",
@@ -887,51 +1391,26 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The best version of a product often has fewer features than the previous one. Not because features were missing, but because someone had the courage to remove things that weren't earning their keep. Every feature has a cost - in maintenance, in cognitive load, in the weight of the interface.",
-									"_key": "k7"
+									"text": "New photos of South Head after the track repairs.",
+									"_key": "k13"
 								}
 							],
-							"_key": "k6"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Simplicity is a practice, not a destination. You never arrive at simple. You just keep asking: is this necessary? Could this be clearer? Is there a way to solve this problem by removing something instead of adding something? The answer is yes more often than you'd expect.",
-									"_key": "k9"
-								}
-							],
-							"_key": "k8"
+							"_key": "k12"
 						}
 					]
 				},
+				"bylines": [
+					{
+						"byline": "byline-saltwater"
+					}
+				],
 				"taxonomies": {
-					"category": ["notes"],
-					"tag": ["opinion"]
-				}
-			},
-			{
-				"id": "post-draft",
-				"slug": "work-in-progress",
-				"status": "draft",
-				"data": {
-					"title": "Work in Progress",
-					"excerpt": "This post is still being written.",
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "This is a draft post that won't appear in the public listing.",
-									"_key": "k1"
-								}
-							],
-							"_key": "k0"
-						}
+					"category": [
+						"field-log"
+					],
+					"tag": [
+						"eastern-beaches",
+						"harbour"
 					]
 				}
 			}
